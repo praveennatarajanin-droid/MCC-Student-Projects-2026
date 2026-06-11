@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Virtual Chemistry Lab — Qualitative Analysis</title>
+  <link rel="stylesheet" href="home.css" />
+</head>
+<body>
+
+  <canvas id="bg-canvas"></canvas>
+
+  <div id="home-wrapper">
+
+    <!-- ── Header ── -->
+    <header id="home-header">
+      <div id="logo-area">
+        <span id="logo-icon">⚗️</span>
+        <div>
+          <div id="logo-title">Virtual Chemistry Lab</div>
+          <div id="logo-tagline">Qualitative Analysis Suite</div>
+        </div>
+      </div>
+      <div id="header-badges">
+        <span class="badge">A-Level</span>
+        <span class="badge">3D Interactive</span>
+        <span class="badge">Scored</span>
+      </div>
+    </header>
+
+    <!-- ── Hero ── -->
+    <section id="hero">
+      <div id="hero-left">
+        <div id="hero-eyebrow">Laboratory Simulations</div>
+        <h1 id="hero-title">Qualitative <span>Chemical Analysis</span></h1>
+        <p id="hero-sub">
+          Conduct systematic identification of unknown ions using authentic laboratory
+          procedures. Each experiment follows RSC method, runs in real-time 3D and
+          generates a scored lab report.
+        </p>
+        <div id="hero-stats">
+          <div class="stat-item">
+            <div class="stat-num">7</div>
+            <div class="stat-label">Experiments</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-num">20+</div>
+            <div class="stat-label">Unknown Samples</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-num">100</div>
+            <div class="stat-label">Marks Each</div>
+          </div>
+        </div>
+      </div>
+      <div id="hero-element">
+        <div class="el-number">periodic</div>
+        <div class="el-symbol">QA</div>
+        <div class="el-name">Qualitative</div>
+        <div class="el-mass">Analysis Lab</div>
+      </div>
+    </section>
+
+    <!-- ── Experiments ── -->
+    <div class="section-label">Select Experiment</div>
+    <section id="experiment-grid">
+
+      <!-- Experiment 1 -->
+      <div class="exp-card" id="card-1" onclick="window.location='experiment1.html'">
+        <div class="exp-card-header">
+          <span class="exp-number">Exp 01</span>
+          <span class="exp-tag tag-qualitative">Cation Test</span>
+        </div>
+        <div class="exp-icon-area">
+          <div class="exp-3d-icon">🧪</div>
+          <div class="exp-beakers">
+            <span class="mini-tube" style="background:#1a7fff"></span>
+            <span class="mini-tube" style="background:#00aa44"></span>
+            <span class="mini-tube" style="background:#ff5fa0"></span>
+            <span class="mini-tube" style="background:#c8a27d"></span>
+            <span class="mini-tube" style="background:#cc6600"></span>
+          </div>
+        </div>
+        <h2 class="exp-title">Salt Analysis</h2>
+        <p class="exp-subtitle">Colour Observation &amp; Precipitate Test</p>
+        <div class="exp-equation">
+          Cu²⁺ + 2OH⁻ → Cu(OH)₂↓ (blue)<br>
+          Fe³⁺ + 3OH⁻ → Fe(OH)₃↓ (brown)
+        </div>
+        <div class="exp-desc">
+          Dissolve an unknown salt and add NaOH, NH₃, HCl or H₂SO₄.
+          Identify the metal cation from the colour of the precipitate formed.
+        </div>
+        <div class="exp-procedure">
+          <div class="proc-step"><span class="proc-num">1</span>Select unknown salt sample</div>
+          <div class="proc-step"><span class="proc-num">2</span>Dissolve in distilled water</div>
+          <div class="proc-step"><span class="proc-num">3</span>Add diagnostic reagent drop-wise</div>
+          <div class="proc-step"><span class="proc-num">4</span>Observe precipitate colour</div>
+          <div class="proc-step"><span class="proc-num">5</span>Identify the metal cation</div>
+        </div>
+        <div class="exp-ions">
+          <span class="ion-chip" style="--c:#1a7fff">Cu²⁺</span>
+          <span class="ion-chip" style="--c:#00aa44">Ni²⁺</span>
+          <span class="ion-chip" style="--c:#ff5fa0">Co²⁺</span>
+          <span class="ion-chip" style="--c:#c8a27d">Mn²⁺</span>
+          <span class="ion-chip" style="--c:#cc6600">Fe³⁺</span>
+        </div>
+        <div class="exp-footer">
+          <div class="exp-meta">
+            <span>⏱ ~10 min</span>
+            <span>📋 100 marks</span>
+          </div>
+          <button class="exp-launch-btn">Open Lab →</button>
+        </div>
+      </div>
+
+      <!-- Experiment 2 -->
+      <div class="exp-card" id="card-2" onclick="window.location='experiment2.html'">
+        <div class="exp-card-header">
+          <span class="exp-number">Exp 02</span>
+          <span class="exp-tag tag-flame">Flame Test</span>
+        </div>
+        <div class="exp-icon-area">
+          <div class="exp-3d-icon">🔥</div>
+          <div class="exp-beakers">
+            <span class="mini-tube" style="background:#00cc44"></span>
+            <span class="mini-tube" style="background:#00ffaa"></span>
+            <span class="mini-tube" style="background:#cc0022"></span>
+            <span class="mini-tube" style="background:#ff4400"></span>
+          </div>
+        </div>
+        <h2 class="exp-title">Flame Test</h2>
+        <p class="exp-subtitle">Conc. HCl Paste Method (Bunsen Burner)</p>
+        <div class="exp-equation">
+          M⁺ + energy → M⁺* → M⁺ + hν<br>
+          Characteristic emission spectrum
+        </div>
+        <div class="exp-desc">
+          Form a paste of unknown substance with conc. HCl on a wire loop.
+          Hold in the non-luminous Bunsen flame and record the characteristic colour.
+        </div>
+        <div class="exp-procedure">
+          <div class="proc-step"><span class="proc-num">1</span>Select unknown substance</div>
+          <div class="proc-step"><span class="proc-num">2</span>Add 1–2 drops conc. HCl</div>
+          <div class="proc-step"><span class="proc-num">3</span>Make paste on wire loop</div>
+          <div class="proc-step"><span class="proc-num">4</span>Hold in Bunsen flame</div>
+          <div class="proc-step"><span class="proc-num">5</span>Record flame colour</div>
+        </div>
+        <div class="exp-ions">
+          <span class="ion-chip" style="--c:#00cc44">B³⁺</span>
+          <span class="ion-chip" style="--c:#00ddaa">Cu²⁺</span>
+          <span class="ion-chip" style="--c:#cc0022">Sr²⁺</span>
+          <span class="ion-chip" style="--c:#ff6622">Ca²⁺</span>
+          <span class="ion-chip" style="--c:#ffcc00">Na⁺</span>
+          <span class="ion-chip" style="--c:#cc44ff">K⁺</span>
+        </div>
+        <div class="exp-footer">
+          <div class="exp-meta">
+            <span>⏱ ~8 min</span>
+            <span>📋 100 marks</span>
+          </div>
+          <button class="exp-launch-btn">Open Lab →</button>
+        </div>
+      </div>
+
+      <!-- Experiment 3 -->
+      <div class="exp-card" id="card-3" onclick="window.location='experiment3.html'">
+        <div class="exp-card-header">
+          <span class="exp-number">Exp 03</span>
+          <span class="exp-tag tag-anion">Anion Test</span>
+        </div>
+        <div class="exp-icon-area">
+          <div class="exp-3d-icon">🧫</div>
+          <div class="exp-beakers">
+            <span class="mini-tube" style="background:#e0e0d8"></span>
+            <span class="mini-tube" style="background:#88ccff"></span>
+            <span class="mini-tube" style="background:#aaddbb"></span>
+          </div>
+        </div>
+        <h2 class="exp-title">Carbonate Test</h2>
+        <p class="exp-subtitle">Dilute HCl + Limewater Method</p>
+        <div class="exp-equation">
+          CO₃²⁻ + 2HCl → CO₂↑ + H₂O + 2Cl⁻<br>
+          CO₂ + Ca(OH)₂ → CaCO₃↓ + H₂O
+        </div>
+        <div class="exp-desc">
+          Add dilute HCl to the substance on a watch glass. Brisk effervescence
+          with colourless gas that turns limewater milky confirms CO₃²⁻.
+        </div>
+        <div class="exp-procedure">
+          <div class="proc-step"><span class="proc-num">1</span>Place substance on watch glass</div>
+          <div class="proc-step"><span class="proc-num">2</span>Add drops of dilute HCl</div>
+          <div class="proc-step"><span class="proc-num">3</span>Observe effervescence &amp; gas</div>
+          <div class="proc-step"><span class="proc-num">4</span>Pass gas through limewater</div>
+          <div class="proc-step"><span class="proc-num">5</span>Confirm carbonate ion present</div>
+        </div>
+        <div class="exp-ions">
+          <span class="ion-chip" style="--c:#88ccff">CO₃²⁻</span>
+          <span class="ion-chip" style="--c:#aabbcc">HCO₃⁻</span>
+          <span class="ion-chip" style="--c:#ffcc44">S²⁻</span>
+          <span class="ion-chip" style="--c:#dd7722">SO₃²⁻</span>
+          <span class="ion-chip" style="--c:#bb4444">NO₂⁻</span>
+        </div>
+        <div class="exp-footer">
+          <div class="exp-meta">
+            <span>⏱ ~8 min</span>
+            <span>📋 100 marks</span>
+          </div>
+          <button class="exp-launch-btn">Open Lab →</button>
+        </div>
+      </div>
+
+      <!-- Experiment 4 -->
+      <div class="exp-card" id="card-4" onclick="window.location='experiment4.html'">
+        <div class="exp-card-header">
+          <span class="exp-number">Exp 04</span>
+          <span class="exp-tag tag-qualitative" style="background:#5e72e4">Dry Test</span>
+        </div>
+        <div class="exp-icon-area">
+          <div class="exp-3d-icon">🔥</div>
+          <div class="exp-beakers">
+            <span class="mini-tube" style="background:#ffcc44"></span>
+            <span class="mini-tube" style="background:#cc4422"></span>
+            <span class="mini-tube" style="background:#ffffff"></span>
+          </div>
+        </div>
+        <h2 class="exp-title">Action of Heat</h2>
+        <p class="exp-subtitle">Dry Heating Test in Test Tube</p>
+        <div class="exp-equation">
+          Zn²⁺ (white) + Δ → ZnO (yellow hot)<br>
+          NH₄⁺ + Δ → NH₃↑ (pungent smelling)
+        </div>
+        <div class="exp-desc">
+          Heat a small quantity of an unknown mixture in a dry test tube. Observe physical color changes and evolved gases, then confirm with chemical tests.
+        </div>
+        <div class="exp-procedure">
+          <div class="proc-step"><span class="proc-num">1</span>Select mixture sample</div>
+          <div class="proc-step"><span class="proc-num">2</span>Place in a clean, dry test tube</div>
+          <div class="proc-step"><span class="proc-num">3</span>Heat over Bunsen burner flame</div>
+          <div class="proc-step"><span class="proc-num">4</span>Observe color change &amp; gas evolved</div>
+          <div class="proc-step"><span class="proc-num">5</span>Conduct confirmatory gas tests</div>
+        </div>
+        <div class="exp-ions">
+          <span class="ion-chip" style="--c:#88ccff">CO₃²⁻</span>
+          <span class="ion-chip" style="--c:#bb4444">NO₃⁻</span>
+          <span class="ion-chip" style="--c:#f6e05e">NH₄⁺</span>
+          <span class="ion-chip" style="--c:#ffffff">Zn²⁺</span>
+        </div>
+        <div class="exp-footer">
+          <div class="exp-meta">
+            <span>⏱ ~10 min</span>
+            <span>📋 100 marks</span>
+          </div>
+          <button class="exp-launch-btn">Open Lab →</button>
+        </div>
+      </div>
+
+      <!-- Experiment 5 -->
+      <div class="exp-card" id="card-5" onclick="window.location='experiment5.html'">
+        <div class="exp-card-header">
+          <span class="exp-number">Exp 05</span>
+          <span class="exp-tag tag-anion">Acid Test</span>
+        </div>
+        <div class="exp-icon-area">
+          <div class="exp-3d-icon">⚗️</div>
+          <div class="exp-beakers">
+            <span class="mini-tube" style="background:#ffffff"></span>
+            <span class="mini-tube" style="background:#ffcc44"></span>
+            <span class="mini-tube" style="background:#aaccff"></span>
+          </div>
+        </div>
+        <h2 class="exp-title">Acid Vapour Tests</h2>
+        <p class="exp-subtitle">Concentrated Sulphuric Acid Test</p>
+        <div class="exp-equation">
+          NaCl + H₂SO₄ → NaHSO₄ + HCl↑ (white fumes with NH₃)<br>
+          2NaBr + 2H₂SO₄ → Na₂SO₄ + SO₂↑ + Br₂↑ (red fumes)
+        </div>
+        <div class="exp-desc">
+          Warm a small quantity of the substance with Concentrated Sulphuric Acid. Observe evolved gases and perform confirmatory tests for Chloride, Bromide, and Fluoride.
+        </div>
+        <div class="exp-procedure">
+          <div class="proc-step"><span class="proc-num">1</span>Select unknown mixture sample</div>
+          <div class="proc-step"><span class="proc-num">2</span>Add Conc. sulphuric acid using dropper</div>
+          <div class="proc-step"><span class="proc-num">3</span>Warm carefully over Bunsen burner</div>
+          <div class="proc-step"><span class="proc-num">4</span>Perform confirmatory gas/vapour tests</div>
+          <div class="proc-step"><span class="proc-num">5</span>Identify the active anions present</div>
+        </div>
+        <div class="exp-ions">
+          <span class="ion-chip" style="--c:#88ccff">Cl⁻</span>
+          <span class="ion-chip" style="--c:#dd7722">Br⁻</span>
+          <span class="ion-chip" style="--c:#ffffff">F⁻</span>
+        </div>
+        <div class="exp-footer">
+          <div class="exp-meta">
+            <span>⏱ ~10 min</span>
+            <span>📋 100 marks</span>
+          </div>
+          <button class="exp-launch-btn">Open Lab →</button>
+        </div>
+      </div>
+
+      <!-- Experiment 6 -->
+      <div class="exp-card" id="card-6" onclick="window.location='experiment6.html'">
+        <div class="exp-card-header">
+          <span class="exp-number">Exp 06</span>
+          <span class="exp-tag tag-anion" style="background:#6b21a8">MnO₂ Test</span>
+        </div>
+        <div class="exp-icon-area">
+          <div class="exp-3d-icon">🔬</div>
+          <div class="exp-beakers">
+            <span class="mini-tube" style="background:#b8f563"></span>
+            <span class="mini-tube" style="background:#a04e1c"></span>
+            <span class="mini-tube" style="background:#ffffff"></span>
+          </div>
+        </div>
+        <h2 class="exp-title">MnO₂ Test</h2>
+        <p class="exp-subtitle">Manganese Dioxide + Con. Sulphuric Acid</p>
+        <div class="exp-equation">
+          MnO₂ + 2NaCl + 2H₂SO₄ → Cl₂↑ (greenish-yellow)<br>
+          MnO₂ + 2KBr + 2H₂SO₄ → Br₂↑ (reddish-brown)
+        </div>
+        <div class="exp-desc">
+          Add equal amounts of MnO₂ and a few drops of Concentrated Sulphuric Acid to the mixture. Warm if necessary. Identify Chloride, Bromide, and Oxalate ions from evolved gas.
+        </div>
+        <div class="exp-procedure">
+          <div class="proc-step"><span class="proc-num">1</span>Select unknown mixture sample</div>
+          <div class="proc-step"><span class="proc-num">2</span>Add equal amounts of MnO₂ powder</div>
+          <div class="proc-step"><span class="proc-num">3</span>Add a few drops of Con. H₂SO₄</div>
+          <div class="proc-step"><span class="proc-num">4</span>Warm &amp; observe gas/vapour evolved</div>
+          <div class="proc-step"><span class="proc-num">5</span>Test with starch iodide, fluorescence paper &amp; limewater</div>
+        </div>
+        <div class="exp-ions">
+          <span class="ion-chip" style="--c:#b8f563">Cl⁻</span>
+          <span class="ion-chip" style="--c:#a04e1c">Br⁻</span>
+          <span class="ion-chip" style="--c:#88ccff">C₂O₄²⁻</span>
+        </div>
+        <div class="exp-footer">
+          <div class="exp-meta">
+            <span>⏱ ~10 min</span>
+            <span>📋 100 marks</span>
+          </div>
+          <button class="exp-launch-btn">Open Lab →</button>
+        </div>
+      </div>
+
+      <!-- Experiment 7 -->
+      <div class="exp-card" id="card-7" onclick="window.location='experiment7.html'">
+        <div class="exp-card-header">
+          <span class="exp-number">Exp 07</span>
+          <span class="exp-tag tag-anion" style="background:rgba(4,120,87,0.12); color:#047857; border:1px solid rgba(4,120,87,0.25)">Copper Test</span>
+        </div>
+        <div class="exp-icon-area">
+          <div class="exp-3d-icon">🧪</div>
+          <div class="exp-beakers">
+            <span class="mini-tube" style="background:#047857"></span>
+            <span class="mini-tube" style="background:#ffcc44"></span>
+            <span class="mini-tube" style="background:#ffffff"></span>
+          </div>
+        </div>
+        <h2 class="exp-title">Copper Turnings Test</h2>
+        <p class="exp-subtitle">Mixture + Copper Turnings + Con. H₂SO₄</p>
+        <div class="exp-equation">
+          KNO₃ + H₂SO₄ → KHSO₄ + HNO₃<br>
+          4HNO₃ + Cu → Cu(NO₃)₂ (green) + 2NO₂↑ (brown) + 2H₂O
+        </div>
+        <div class="exp-desc">
+          Add a piece of copper turnings and a few drops of Concentrated Sulphuric Acid to the mixture. Warm and observe the solution turning green and evolution of reddish-brown vapours.
+        </div>
+        <div class="exp-procedure">
+          <div class="proc-step"><span class="proc-num">1</span>Select unknown mixture sample</div>
+          <div class="proc-step"><span class="proc-num">2</span>Add a piece of copper turnings</div>
+          <div class="proc-step"><span class="proc-num">3</span>Add Concentrated Sulphuric Acid</div>
+          <div class="proc-step"><span class="proc-num">4</span>Warm gently over Bunsen flame</div>
+          <div class="proc-step"><span class="proc-num">5</span>Perform confirmatory gas tests</div>
+        </div>
+        <div class="exp-ions">
+          <span class="ion-chip" style="--c:#047857">NO₃⁻</span>
+          <span class="ion-chip" style="--c:#88ccff">Cl⁻</span>
+          <span class="ion-chip" style="--c:#dd7722">Br⁻</span>
+        </div>
+        <div class="exp-footer">
+          <div class="exp-meta">
+            <span>⏱ ~10 min</span>
+            <span>📋 100 marks</span>
+          </div>
+          <button class="exp-launch-btn">Open Lab →</button>
+        </div>
+      </div>
+
+
+    </section>
+
+    <!-- ── Quick Reference Table ── -->
+    <div id="quick-ref">
+      <div class="section-label">Quick Reference</div>
+      <div class="ref-grid">
+
+        <div class="ref-card">
+          <div class="ref-card-title">NaOH Precipitate Colours</div>
+          <div class="ref-row"><span class="ref-ion">Cu²⁺</span><div class="ref-colour" style="background:#1a7fff"></div><span class="ref-obs">Blue gelatinous ppt</span></div>
+          <div class="ref-row"><span class="ref-ion">Fe³⁺</span><div class="ref-colour" style="background:#cc6600"></div><span class="ref-obs">Rust-brown ppt</span></div>
+          <div class="ref-row"><span class="ref-ion">Ni²⁺</span><div class="ref-colour" style="background:#00aa44"></div><span class="ref-obs">Green ppt</span></div>
+          <div class="ref-row"><span class="ref-ion">Co²⁺</span><div class="ref-colour" style="background:#0044cc"></div><span class="ref-obs">Blue → pink ppt</span></div>
+          <div class="ref-row"><span class="ref-ion">Mn²⁺</span><div class="ref-colour" style="background:#ddddcc"></div><span class="ref-obs">Off-white ppt</span></div>
+        </div>
+
+        <div class="ref-card">
+          <div class="ref-card-title">Flame Test Colours</div>
+          <div class="ref-row"><span class="ref-ion">Na⁺</span><div class="ref-colour" style="background:#ffcc00"></div><span class="ref-obs">Persistent yellow</span></div>
+          <div class="ref-row"><span class="ref-ion">K⁺</span><div class="ref-colour" style="background:#cc44ff"></div><span class="ref-obs">Lilac / violet</span></div>
+          <div class="ref-row"><span class="ref-ion">Ca²⁺</span><div class="ref-colour" style="background:#ff6622"></div><span class="ref-obs">Brick red</span></div>
+          <div class="ref-row"><span class="ref-ion">Sr²⁺</span><div class="ref-colour" style="background:#cc0022"></div><span class="ref-obs">Crimson red</span></div>
+          <div class="ref-row"><span class="ref-ion">Cu²⁺</span><div class="ref-colour" style="background:#00ddaa"></div><span class="ref-obs">Blue-green</span></div>
+        </div>
+
+        <div class="ref-card">
+          <div class="ref-card-title">Anion Identification</div>
+          <div class="ref-row"><span class="ref-ion">CO₃²⁻</span><span class="ref-obs">Effervescence + milky limewater</span></div>
+          <div class="ref-row"><span class="ref-ion">S²⁻</span><span class="ref-obs">H₂S — rotten egg odour</span></div>
+          <div class="ref-row"><span class="ref-ion">SO₃²⁻</span><span class="ref-obs">SO₂ — pungent odour</span></div>
+          <div class="ref-row"><span class="ref-ion">NO₂⁻</span><span class="ref-obs">Brown NO₂ gas</span></div>
+          <div class="ref-row"><span class="ref-ion">NO₃⁻</span><span class="ref-obs">NO₂ gas + green soln (with Cu + H₂SO₄)</span></div>
+          <div class="ref-row"><span class="ref-ion">Cl⁻</span><span class="ref-obs">White ppt with AgNO₃</span></div>
+        </div>
+
+        <div class="ref-card">
+          <div class="ref-card-title">Safety Reminders</div>
+          <div class="ref-row"><span class="ref-obs" style="color:#d4922a">⚠ Always wear safety goggles</span></div>
+          <div class="ref-row"><span class="ref-obs">HCl and H₂SO₄ are corrosive</span></div>
+          <div class="ref-row"><span class="ref-obs">NaOH causes chemical burns</span></div>
+          <div class="ref-row"><span class="ref-obs">Never smell gas directly</span></div>
+          <div class="ref-row"><span class="ref-obs">Use fume cupboard for SO₂/H₂S</span></div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ── Footer ── -->
+    <footer id="home-footer">
+      <span>Virtual Chemistry Lab &copy; 2026</span>
+      <span>A-Level Qualitative Analysis — RSC Methods</span>
+      <span>Built with Three.js &amp; GSAP</span>
+    </footer>
+
+  </div><!-- /home-wrapper -->
+
+  <script>
+    // ── Chemistry background effect with rising bubbles & mouse trails ──
+    const canvas = document.getElementById('bg-canvas');
+    const ctx    = canvas.getContext('2d');
+    let W, H;
+
+    function resize() {
+      W = canvas.width  = window.innerWidth;
+      H = canvas.height = window.innerHeight;
+    }
+    resize();
+    window.addEventListener('resize', resize);
+
+    // Static faint grid of dots
+    function drawGrid() {
+      ctx.clearRect(0, 0, W, H);
+      const spacing = 38;
+      ctx.fillStyle = 'rgba(255,255,255,0.03)';
+      for (let x = spacing; x < W; x += spacing) {
+        for (let y = spacing; y < H; y += spacing) {
+          ctx.beginPath();
+          ctx.arc(x, y, 0.8, 0, Math.PI * 2);
+          ctx.fill();
+        }
+      }
+    }
+
+    // Colors: Neon Chemistry Theme
+    const COLS = ['#38bdf8', '#34d399', '#fbbf24', '#c084fc', '#f43f5e'];
+    const pts  = [];
+    const maxBondsDistance = 140;
+
+    // Initialize 32 drifting molecule points
+    for (let i = 0; i < 32; i++) {
+      pts.push({
+        x: Math.random() * W,
+        y: Math.random() * H,
+        r: 1.5 + Math.random() * 2.5,
+        vx: (Math.random() - 0.5) * 0.15,
+        vy: -0.15 - Math.random() * 0.25, // Rising bubbles
+        col: COLS[i % COLS.length],
+        a: 0.15 + Math.random() * 0.25,
+        driftPhase: Math.random() * Math.PI * 2
+      });
+    }
+
+    // Mouse interactive trails (sparks/bubbles)
+    const mouseParticles = [];
+    let mouseX = -9999, mouseY = -9999;
+    let spawnTimer = 0;
+
+    window.addEventListener('mousemove', (e) => {
+      mouseX = e.clientX;
+      mouseY = e.clientY;
+      
+      // Spawn bubble particles on mouse move
+      spawnTimer++;
+      if (spawnTimer % 2 === 0) {
+        mouseParticles.push({
+          x: mouseX,
+          y: mouseY,
+          r: 2 + Math.random() * 4,
+          vx: (Math.random() - 0.5) * 0.8,
+          vy: -0.4 - Math.random() * 0.8, // floats up
+          life: 1.0, // starts at full life
+          decay: 0.015 + Math.random() * 0.015,
+          col: COLS[Math.floor(Math.random() * COLS.length)]
+        });
+      }
+    });
+
+    let time = 0;
+    function draw() {
+      time += 0.01;
+      drawGrid();
+
+      // Update and draw rising molecule points & draw bonds
+      for (let i = 0; i < pts.length; i++) {
+        const p1 = pts[i];
+        p1.y += p1.vy;
+        p1.x += p1.vx + Math.sin(time + p1.driftPhase) * 0.08;
+
+        // Reset if floats off top
+        if (p1.y < -10) {
+          p1.y = H + 10;
+          p1.x = Math.random() * W;
+        }
+
+        // Draw bonds between close molecules
+        for (let j = i + 1; j < pts.length; j++) {
+          const p2 = pts[j];
+          const dx = p1.x - p2.x, dy = p1.y - p2.y;
+          const d = Math.sqrt(dx*dx + dy*dy);
+          if (d < maxBondsDistance) {
+            ctx.beginPath();
+            ctx.moveTo(p1.x, p1.y);
+            ctx.lineTo(p2.x, p2.y);
+            ctx.strokeStyle = `rgba(56,189,248,${0.07 * (1 - d/maxBondsDistance)})`;
+            ctx.lineWidth = 0.8;
+            ctx.stroke();
+          }
+        }
+
+        // Draw the molecule particle itself
+        ctx.beginPath();
+        ctx.arc(p1.x, p1.y, p1.r, 0, Math.PI * 2);
+        ctx.fillStyle = p1.col + Math.round(p1.a * 255).toString(16).padStart(2, '0');
+        ctx.shadowBlur = 4;
+        ctx.shadowColor = p1.col;
+        ctx.fill();
+        ctx.shadowBlur = 0; // reset
+      }
+
+      // Update and draw mouse bubble particles
+      for (let i = mouseParticles.length - 1; i >= 0; i--) {
+        const p = mouseParticles[i];
+        p.x += p.vx;
+        p.y += p.vy;
+        p.life -= p.decay;
+
+        if (p.life <= 0) {
+          mouseParticles.splice(i, 1);
+          continue;
+        }
+
+        // Draw bubble with simple glow ring outline
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.r * (1 + (1 - p.life) * 0.5), 0, Math.PI * 2);
+        ctx.strokeStyle = p.col + Math.round(p.life * 180).toString(16).padStart(2, '0');
+        ctx.lineWidth = 1.2;
+        ctx.stroke();
+
+        ctx.beginPath();
+        ctx.arc(p.x - p.r * 0.25, p.y - p.r * 0.25, 0.5, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(255,255,255,${p.life * 0.6})`;
+        ctx.fill();
+      }
+
+      requestAnimationFrame(draw);
+    }
+    draw();
+
+    // Subtle card hover — no tilt, just border glow
+    document.querySelectorAll('.exp-card:not(.exp-card-soon)').forEach(card => {
+      card.addEventListener('mouseenter', () => {
+        card.style.boxShadow = '0 12px 40px rgba(0,0,0,0.7), inset 0 1px 0 rgba(255,255,255,0.06)';
+      });
+      card.addEventListener('mouseleave', () => {
+        card.style.boxShadow = '';
+      });
+    });
+  </script>
+</body>
+</html>

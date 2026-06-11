@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Virtual Lab — Experiment 3: Carbonate Test</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    /* ── Experiment 3 specific styles ── */
+
+    /* Procedure mini card */
+    .proc-mini { display: flex; flex-direction: column; gap: 4px; }
+    .proc-mini-step {
+      font-size: .72rem; color: #a0aec0; padding: 3px 0;
+      border-bottom: 1px solid rgba(99,179,237,0.1);
+      line-height: 1.4;
+    }
+    .proc-mini-step:last-child { border-bottom: none; }
+    .safety-note {
+      font-size: .7rem; color: #fc8181;
+      background: rgba(252,129,74,0.08);
+      border: 1px solid rgba(252,129,74,0.25);
+      border-radius: 5px; padding: 5px 8px; margin-top: 4px;
+    }
+    .table-note {
+      font-size: .7rem; color: #718096;
+      margin-top: 6px; padding-top: 5px;
+      border-top: 1px solid rgba(99,179,237,0.12);
+    }
+
+    /* Gas observation rows — stacked layout so select never overflows */
+    .gas-observation {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      padding: 10px 12px;
+      background: rgba(40, 50, 70, 0.5);
+      border: 1px solid rgba(99,179,237,0.15);
+      border-radius: 7px;
+      margin: 6px 0;
+    }
+    .gas-obs-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: .8rem;
+      color: #e2e8f0;
+    }
+    .gas-icon { font-size: 1.2em; flex-shrink: 0; }
+    .gas-observation select {
+      width: 100%;
+      background: rgba(14, 22, 40, 0.9);
+      border: 1px solid rgba(99,179,237,0.3);
+      border-radius: 5px;
+      color: #e2e8f0;
+      padding: 7px 10px;
+      font-size: .78rem;
+      cursor: pointer;
+      outline: none;
+      transition: border-color .2s;
+    }
+    .gas-observation select:focus { border-color: #63b3ed; }
+    .gas-observation select option { background: #0d1117; }
+
+    /* Limewater tube visual */
+    .limewater-tube {
+      width: 50px;
+      height: 100px;
+      background: linear-gradient(to top, rgba(200,240,200,0.7) 75%, transparent 75%);
+      border: 2px solid rgba(99,179,237,0.5);
+      border-radius: 0 0 12px 12px;
+      display: inline-block;
+      transition: background 1.5s ease;
+      position: relative;
+      overflow: hidden;
+    }
+    .limewater-tube.milky {
+      background: linear-gradient(to top, rgba(220,220,210,0.92) 75%, transparent 75%);
+      border-color: rgba(200,200,180,0.7);
+    }
+    /* Bubble animation inside tube */
+    .limewater-tube::after {
+      content: '';
+      position: absolute;
+      bottom: 10px; left: 50%;
+      width: 8px; height: 8px;
+      background: rgba(255,255,255,0.5);
+      border-radius: 50%;
+      transform: translateX(-50%);
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+    .limewater-tube.milky::after { opacity: 0.8; }
+
+    /* Effervescence panel — wider to fit content */
+    #effervescence-panel { min-width: 340px; max-width: 400px; }
+    #limewater-panel     { min-width: 300px; }
+
+    /* Keep floating panels above canvas */
+    .floating-panel { z-index: 50; }
+  </style>
+</head>
+<body>
+
+  <div id="ui-overlay">
+
+    <!-- Welcome Popup Dialog -->
+    <div id="welcome-popup-overlay">
+      <div id="welcome-popup-card">
+        <div class="welcome-badge">Exp 03</div>
+        <div class="welcome-avatar-area">
+          <svg width="120" height="120" viewBox="0 0 120 120">
+            <!-- Glow background -->
+            <defs>
+              <radialGradient id="avatarGlow" cx="50%" cy="50%" r="50%">
+                <stop offset="0%" stop-color="#34d399" stop-opacity="0.3" />
+                <stop offset="100%" stop-color="#34d399" stop-opacity="0" />
+              </radialGradient>
+              <linearGradient id="gogglesGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#06b6d4" />
+                <stop offset="100%" stop-color="#0891b2" stop-opacity="0.6" />
+              </linearGradient>
+              <linearGradient id="flaskGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                <stop offset="0%" stop-color="#10b981" />
+                <stop offset="100%" stop-color="#047857" />
+              </linearGradient>
+            </defs>
+            <circle cx="60" cy="60" r="54" fill="url(#avatarGlow)" />
+            <circle cx="60" cy="60" r="46" fill="#1e293b" stroke="#047857" stroke-width="2" />
+
+            <!-- Shoulders / Coat -->
+            <path d="M25,100 C25,82 40,76 60,76 C80,76 95,82 95,100 Z" fill="#ffffff" stroke="#cbd5e1"
+              stroke-width="1.5" />
+            <!-- Shirt & Tie -->
+            <path d="M52,76 L68,76 L65,95 L60,100 L55,95 Z" fill="#dc2626" />
+            <path d="M50,70 L60,80 L70,70 L60,73 Z" fill="#e2e8f0" />
+            <path d="M42,76 L60,94 L78,76" fill="none" stroke="#cbd5e1" stroke-width="1.5" />
+
+            <!-- Head / Neck -->
+            <rect x="53" y="62" width="14" height="12" fill="#fed7aa" rx="2" />
+            <path d="M45,34 C45,22 75,22 75,34 C75,56 45,56 45,34 Z" fill="#fed7aa" />
+
+            <!-- Hair -->
+            <path d="M43,32 C43,18 77,18 77,32 C80,24 72,16 60,16 C48,16 40,24 43,32 Z" fill="#0f172a" />
+
+            <!-- Safety Goggles -->
+            <rect x="42" y="32" width="36" height="13" rx="4" fill="url(#gogglesGrad)" stroke="#0891b2"
+              stroke-width="1.5" />
+            <line x1="60" y1="32" x2="60" y2="45" stroke="#0891b2" stroke-width="1.5" />
+            <path d="M40,38 L43,38 M77,38 L80,38" stroke="#0f172a" stroke-width="1.5" />
+
+            <!-- Mouth / Smile -->
+            <path d="M54,54 Q60,59 66,54" stroke="#0f172a" stroke-width="2" stroke-linecap="round" fill="none" />
+
+            <!-- Flask held in hand -->
+            <circle cx="34" cy="85" r="8" fill="#fed7aa" />
+            <path d="M26,85 L32,85 L32,80 L36,80 L36,85 L42,85 L44,98 C44,103 24,103 24,98 Z" fill="url(#flaskGrad)"
+              stroke="#10b981" stroke-width="1" />
+            <ellipse cx="34" cy="80" rx="3" ry="1" fill="#a7f3d0" />
+            <circle cx="34" cy="94" r="5" fill="#34d399" opacity="0.6" filter="blur(1px)" />
+            <circle cx="31" cy="74" r="1.5" fill="#34d399" />
+            <circle cx="37" cy="70" r="1" fill="#34d399" />
+            <circle cx="33" cy="67" r="0.8" fill="#34d399" />
+          </svg>
+        </div>
+        <h2>Welcome to the Virtual Lab</h2>
+        <h3>Experiment 3 — Carbonate Test</h3>
+        <p>
+          In this experiment, you will perform qualitative analysis of unknown salts using dilute Hydrochloric Acid (HCl) and check the evolved carbon dioxide (CO₂) gas using limewater to confirm the presence of Carbonate (CO₃²⁻).
+        </p>
+        <div class="welcome-warning">
+          ⚠️ <strong>Safety Protocol:</strong> Dilute HCl is an irritant. Handle with care and wear virtual safety goggles!
+        </div>
+        <button id="btn-start-lab" class="welcome-start-btn">Begin Analysis</button>
+      </div>
+    </div>
+
+    <!-- ── Top Bar ── -->
+    <div id="topbar">
+      <span id="lab-title">Experiment 3 — Carbonate Test (Dilute HCl Reaction)</span>
+      <span id="score-display">Score: <b id="score-val">0</b> / 100</span>
+      <a href="index.html" class="home-link">Home</a>
+    </div>
+
+    <!-- ── Step Indicator ── -->
+    <div id="step-indicator">
+      <div class="step" id="step-1">1. Select Sample</div>
+      <div class="step" id="step-2">2. Place on Watch Glass</div>
+      <div class="step" id="step-3">3. Add Dilute HCl</div>
+      <div class="step" id="step-4">4. Observe Effervescence</div>
+      <div class="step" id="step-5">5. Test Gas (Limewater)</div>
+      <div class="step" id="step-6">6. Identify & Submit</div>
+    </div>
+
+    <!-- ── Lab Assistant ── -->
+    <div id="assistant-panel">
+      <div id="assistant-avatar" style="font-size: 0.85rem; font-weight: bold; background: #3182ce; color: #fff; border-radius: 50%; width: 36px; height: 36px; display: flex; align-items: center; justify-content: center;">LAB</div>
+      <div id="assistant-msg">Welcome! Select an unknown salt sample to test for carbonate ions.</div>
+    </div>
+
+    <!-- ── Left Panel: Sample Selection + Reagents ── -->
+    <div id="left-panel">
+
+      <div class="shelf-card">
+        <div class="shelf-label">Unknown Samples</div>
+        <button class="salt-btn" id="btn-unknown">Unknown Salt X</button>
+        <button class="salt-btn" id="btn-random">Random Sample</button>
+      </div>
+
+      <div class="shelf-card" style="margin-top:10px">
+        <div class="shelf-label">Reagent Shelf</div>
+        <button class="reagent-btn" data-reagent="dilHCl" disabled>HCl (dil.) — Dilute Hydrochloric Acid</button>
+        <button class="reagent-btn" data-reagent="limewater" disabled>Ca(OH)₂ — Limewater</button>
+      </div>
+
+      <!-- Procedure Card -->
+      <div class="shelf-card" style="margin-top:10px">
+        <div class="shelf-label">Procedure</div>
+        <div class="proc-mini">
+          <div class="proc-mini-step">1. Take small amount of substance on watch glass</div>
+          <div class="proc-mini-step">2. Add few drops of dilute HCl</div>
+          <div class="proc-mini-step">3. Observe for brisk effervescence</div>
+          <div class="proc-mini-step">4. Pass the evolved gas through limewater</div>
+          <div class="proc-mini-step">5. Observe if limewater turns milky</div>
+        </div>
+        <div class="safety-note">Warning: Wear safety goggles. HCl is corrosive.</div>
+      </div>
+
+    </div>
+
+    <!-- ── Right Panel: Observations ── -->
+    <div id="right-panel">
+
+      <!-- Observation Panel -->
+      <div id="observation-panel">
+        <div class="panel-title">Observation Table</div>
+
+        <div class="obs-row">
+          <span class="obs-label">Sample:</span>
+          <span id="obs-sample">—</span>
+        </div>
+        <div class="obs-row">
+          <span class="obs-label">Reagent Added:</span>
+          <span id="obs-reagent">—</span>
+        </div>
+        <div class="obs-row">
+          <span class="obs-label">Effervescence:</span>
+          <span id="obs-effervescence">—</span>
+        </div>
+        <div class="obs-row">
+          <span class="obs-label">Gas Colour:</span>
+          <span id="obs-gas-colour">—</span>
+        </div>
+        <div class="obs-row">
+          <span class="obs-label">Gas Odour:</span>
+          <span id="obs-gas-odour">—</span>
+        </div>
+        <div class="obs-row">
+          <span class="obs-label">Limewater Test:</span>
+          <span id="obs-limewater">—</span>
+        </div>
+        <div class="obs-row">
+          <span class="obs-label">Inference:</span>
+          <span id="obs-inference">—</span>
+        </div>
+      </div>
+
+      <!-- Carbonate Identification Table (RSC reference) -->
+      <div id="colour-table">
+        <div class="panel-title">Carbonate Test Reference</div>
+        <table>
+          <thead><tr><th>Observation</th><th>Inference</th></tr></thead>
+          <tbody>
+            <tr>
+              <td>Brisk effervescence with colourless, odourless gas</td>
+              <td>CO₃²⁻ or HCO₃⁻ present</td>
+            </tr>
+            <tr>
+              <td>Gas turns limewater milky</td>
+              <td>CO₂ gas confirmed — Carbonate confirmed</td>
+            </tr>
+            <tr>
+              <td>No effervescence</td>
+              <td>Carbonate absent (or could be sulphide)</td>
+            </tr>
+            <tr>
+              <td>Effervescence with rotten egg smell</td>
+              <td>Sulphide (S²⁻) present, not carbonate</td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="table-note">Reaction: CO₃²⁻ + 2HCl → CO₂↑ + H₂O + 2Cl⁻</div>
+      </div>
+
+      <!-- Notebook -->
+      <div id="notebook">
+        <div class="panel-title">Lab Notebook</div>
+        <div id="notebook-entries"><em>No entries yet.</em></div>
+      </div>
+
+    </div>
+
+    <!-- ── Bottom Action Bar ── -->
+    <div id="action-panel">
+      <button class="action-btn" id="btn-add-hcl" disabled>Add Dilute HCl</button>
+      <button class="action-btn" id="btn-waft" disabled>Waft Gas</button>
+      <button class="action-btn" id="btn-test-gas" disabled>Test Gas with Limewater</button>
+      <button class="action-btn" id="btn-reset">Reset</button>
+    </div>
+
+    <!-- ── Effervescence Observation Panel ── -->
+    <div id="effervescence-panel" class="hidden floating-panel">
+      <div class="panel-title">Gas Evolution Observation</div>
+      <p class="panel-desc">What do you observe when dil. HCl is added?</p>
+      
+      <div class="gas-observation">
+        <div class="gas-obs-header">
+          <span>Do you see bubbles / effervescence?</span>
+        </div>
+        <select id="effervescence-picker">
+          <option value="">-- Select observation --</option>
+          <option value="brisk">Brisk effervescence (vigorous bubbles)</option>
+          <option value="slow">Slow effervescence (few bubbles)</option>
+          <option value="none">No effervescence</option>
+        </select>
+      </div>
+      
+      <div class="gas-observation">
+        <div class="gas-obs-header">
+          <span>What is the colour of the gas?</span>
+        </div>
+        <select id="gas-colour-picker">
+          <option value="">-- Select observation --</option>
+          <option value="colourless">Colourless (no colour)</option>
+          <option value="white">White fumes</option>
+          <option value="yellow">Yellow-green</option>
+          <option value="brown">Brown / reddish-brown</option>
+        </select>
+      </div>
+      
+      <div class="gas-observation">
+        <div class="gas-obs-header">
+          <span>Does the gas have an odour?</span>
+        </div>
+        <select id="gas-odour-picker">
+          <option value="">-- Select observation --</option>
+          <option value="odourless">Odourless</option>
+          <option value="pungent">Pungent / Irritating (SO₂)</option>
+          <option value="rotten-egg">Rotten egg smell (H₂S)</option>
+        </select>
+      </div>
+      
+      <button id="btn-submit-effervescence" class="submit-btn">Submit Observations</button>
+    </div>
+
+    <!-- ── Limewater Test Panel ── -->
+    <div id="limewater-panel" class="hidden floating-panel">
+      <div class="panel-title">Limewater Test for CO₂</div>
+      <p class="panel-desc">Pass the evolved gas through limewater (Ca(OH)₂ solution)</p>
+      
+      <div style="text-align: center; margin: 15px 0;">
+        <div class="limewater-tube" id="limewater-tube"></div>
+        <div style="margin-top: 8px;">
+          <span id="limewater-status">Clear limewater</span>
+        </div>
+      </div>
+      
+      <div class="gas-observation">
+        <div class="gas-obs-header">
+          <span>What happens to the limewater?</span>
+        </div>
+        <select id="limewater-picker">
+          <option value="">-- Select observation --</option>
+          <option value="milky">Turns milky / cloudy (white precipitate)</option>
+          <option value="clear">Remains clear (no change)</option>
+          <option value="bubbles">Bubbles but stays clear</option>
+        </select>
+      </div>
+      
+      <button id="btn-submit-limewater" class="submit-btn">Submit Limewater Result</button>
+    </div>
+
+    <!-- ── Waft Result Modal ── -->
+    <div id="waft-result-panel" class="hidden floating-panel">
+      <div class="panel-title">Waft Gas Result</div>
+      <p class="panel-desc">Odour detected during wafting:</p>
+      <div style="font-size: 1.05rem; font-weight: 700; color: var(--accent); text-align: center; margin: 15px 0;" id="waft-result-text"></div>
+      <button id="btn-close-waft" class="submit-btn">Close</button>
+    </div>
+
+    <!-- ── Identification Panel ── -->
+    <div id="id-panel" class="hidden floating-panel">
+      <div class="panel-title">Identify the Anion</div>
+      <p class="panel-desc">Based on your observations, which anion is present?</p>
+      <div id="id-options">
+        <button class="id-btn" data-anion="carbonate">CO₃²⁻ — Carbonate</button>
+        <button class="id-btn" data-anion="bicarbonate">HCO₃⁻ — Bicarbonate</button>
+        <button class="id-btn" data-anion="sulphide">S²⁻ — Sulphide</button>
+        <button class="id-btn" data-anion="sulphite">SO₃²⁻ — Sulphite</button>
+        <button class="id-btn" data-anion="nitrite">NO₂⁻ — Nitrite</button>
+        <button class="id-btn" data-anion="none">None of the above</button>
+      </div>
+    </div>
+
+    <!-- ── Report Panel ── -->
+    <div id="report-panel" class="hidden floating-panel report-wide">
+      <div class="panel-title">Experiment Report</div>
+      <div id="report-content"></div>
+      <div style="display:flex;gap:8px;margin-top:12px;">
+        <button id="btn-download-pdf" class="submit-btn" style="flex:1">Download PDF</button>
+        <button id="btn-new-exp" style="flex:1">New Experiment</button>
+      </div>
+    </div>
+
+    <!-- ── Hint Box ── -->
+    <div id="hint-box" class="hidden">
+      <span id="hint-icon">Hint:</span>
+      <span id="hint-text"></span>
+    </div>
+
+    <!-- ── Keyboard Guide ── -->
+    <div id="keyboard-guide">
+      <div id="keyboard-guide-text">Loading controls...</div>
+    </div>
+
+  </div><!-- /ui-overlay -->
+
+  <!-- Three.js Canvas -->
+  <canvas id="lab-canvas"></canvas>
+
+  <!-- CDN Libraries -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+  <!-- App Modules -->
+  <script src="js/chemistry/ObservationEngine.js?v=3"></script>
+  <script src="js/apparatus/Dropper.js?v=3"></script>
+  <script src="js/apparatus/Sink.js?v=3"></script>
+  <script src="js/lighting.js?v=3"></script>
+  <script src="js/controls.js?v=3"></script>
+
+  <!-- Carbonate Test 3D Scene (must load before CarbonateTest.js) -->
+  <script src="js/scene3.js?v=4"></script>
+  
+  <!-- Carbonate Test Logic -->
+  <script src="js/chemistry/CarbonateTest.js?v=4"></script>
+  <script>
+    window.addEventListener('DOMContentLoaded', () => {
+      const overlay = document.getElementById('welcome-popup-overlay');
+      const card = document.getElementById('welcome-popup-card');
+      const startBtn = document.getElementById('btn-start-lab');
+
+      // Set initial styles for animation
+      gsap.set(overlay, { opacity: 0, visibility: 'visible' });
+      gsap.set(card, { scale: 0.5, y: 50, opacity: 0 });
+
+      // Animate in
+      gsap.timeline()
+        .to(overlay, { opacity: 1, duration: 0.5, ease: 'power2.out' })
+        .to(card, { scale: 1, y: 0, opacity: 1, duration: 0.8, ease: 'elastic.out(1, 0.75)' }, '-=0.25');
+
+      startBtn.addEventListener('click', () => {
+        gsap.timeline()
+          .to(card, { scale: 0.8, y: -30, opacity: 0, duration: 0.3, ease: 'power2.in' })
+          .to(overlay, { opacity: 0, duration: 0.3, ease: 'power2.in' }, '-=0.2')
+          .add(() => {
+            overlay.remove();
+          });
+      });
+    });
+  </script>
+</body>
+</html>

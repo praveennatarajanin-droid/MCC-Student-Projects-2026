@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Virtual Lab — Experiment 1: Salt Analysis</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    /* Compact mixtures/salts grid */
+    .mixtures-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 5px;
+      margin-bottom: 6px;
+    }
+    .mixtures-grid .salt-btn {
+      text-align: center;
+      padding: 8px 0;
+      font-size: 0.72rem;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+  <div id="ui-overlay">
+
+    <!-- Welcome Popup Dialog -->
+    <div id="welcome-popup-overlay">
+      <div id="welcome-popup-card">
+        <div class="welcome-badge">Exp 01</div>
+        <div class="welcome-avatar-area">
+          <svg width="120" height="120" viewBox="0 0 120 120">
+            <!-- Glow background -->
+            <defs>
+              <radialGradient id="avatarGlow" cx="50%" cy="50%" r="50%">
+                <stop offset="0%" stop-color="#34d399" stop-opacity="0.3" />
+                <stop offset="100%" stop-color="#34d399" stop-opacity="0" />
+              </radialGradient>
+              <linearGradient id="gogglesGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#06b6d4" />
+                <stop offset="100%" stop-color="#0891b2" stop-opacity="0.6" />
+              </linearGradient>
+              <linearGradient id="flaskGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                <stop offset="0%" stop-color="#10b981" />
+                <stop offset="100%" stop-color="#047857" />
+              </linearGradient>
+            </defs>
+            <circle cx="60" cy="60" r="54" fill="url(#avatarGlow)" />
+            <circle cx="60" cy="60" r="46" fill="#1e293b" stroke="#047857" stroke-width="2" />
+
+            <!-- Shoulders / Coat -->
+            <path d="M25,100 C25,82 40,76 60,76 C80,76 95,82 95,100 Z" fill="#ffffff" stroke="#cbd5e1"
+              stroke-width="1.5" />
+            <!-- Shirt & Tie -->
+            <path d="M52,76 L68,76 L65,95 L60,100 L55,95 Z" fill="#dc2626" />
+            <path d="M50,70 L60,80 L70,70 L60,73 Z" fill="#e2e8f0" />
+            <path d="M42,76 L60,94 L78,76" fill="none" stroke="#cbd5e1" stroke-width="1.5" />
+
+            <!-- Head / Neck -->
+            <rect x="53" y="62" width="14" height="12" fill="#fed7aa" rx="2" />
+            <path d="M45,34 C45,22 75,22 75,34 C75,56 45,56 45,34 Z" fill="#fed7aa" />
+
+            <!-- Hair -->
+            <path d="M43,32 C43,18 77,18 77,32 C80,24 72,16 60,16 C48,16 40,24 43,32 Z" fill="#0f172a" />
+
+            <!-- Safety Goggles -->
+            <rect x="42" y="32" width="36" height="13" rx="4" fill="url(#gogglesGrad)" stroke="#0891b2"
+              stroke-width="1.5" />
+            <line x1="60" y1="32" x2="60" y2="45" stroke="#0891b2" stroke-width="1.5" />
+            <path d="M40,38 L43,38 M77,38 L80,38" stroke="#0f172a" stroke-width="1.5" />
+
+            <!-- Mouth / Smile -->
+            <path d="M54,54 Q60,59 66,54" stroke="#0f172a" stroke-width="2" stroke-linecap="round" fill="none" />
+
+            <!-- Flask held in hand -->
+            <circle cx="34" cy="85" r="8" fill="#fed7aa" />
+            <path d="M26,85 L32,85 L32,80 L36,80 L36,85 L42,85 L44,98 C44,103 24,103 24,98 Z" fill="url(#flaskGrad)"
+              stroke="#10b981" stroke-width="1" />
+            <ellipse cx="34" cy="80" rx="3" ry="1" fill="#a7f3d0" />
+            <circle cx="34" cy="94" r="5" fill="#34d399" opacity="0.6" filter="blur(1px)" />
+            <circle cx="31" cy="74" r="1.5" fill="#34d399" />
+            <circle cx="37" cy="70" r="1" fill="#34d399" />
+            <circle cx="33" cy="67" r="0.8" fill="#34d399" />
+          </svg>
+        </div>
+        <h2>Welcome to the Virtual Lab</h2>
+        <h3>Experiment 1 — Salt Analysis</h3>
+        <p>
+          In this experiment, you will perform the qualitative analysis of unknown salts based on their physical appearance and reaction with Sodium Hydroxide (NaOH) and Ammonia (NH₃) solutions to identify characteristic transition metal cations.
+        </p>
+        <div class="welcome-warning">
+          ⚠️ <strong>Safety Protocol:</strong> Avoid direct skin contact with chemical reagents. Wear virtual safety goggles!
+        </div>
+        <button id="btn-start-lab" class="welcome-start-btn">Begin Analysis</button>
+      </div>
+    </div>
+
+    <!-- ── Top Bar ── -->
+    <div id="topbar">
+      <span id="lab-title">Exp 1 — Salt Analysis (Colour Observation)</span>
+      <span id="score-display">Score: <b id="score-val">0</b> / 100</span>
+      <a href="index.html" class="home-link">Home</a>
+    </div>
+
+    <!-- ── Step Indicator ── -->
+    <div id="step-indicator">
+      <div class="step" id="step-1">1. Select Salt</div>
+      <div class="step" id="step-2">2. Add Water</div>
+      <div class="step" id="step-3">3. Add Reagent</div>
+      <div class="step" id="step-4">4. Observe</div>
+      <div class="step" id="step-5">5. Identify</div>
+      <div class="step" id="step-6">6. Submit</div>
+    </div>
+
+    <!-- ── Lab Assistant ── -->
+    <div id="assistant-panel">
+      <div id="assistant-avatar" style="font-size: 0.85rem; font-weight: bold; background: #3182ce; color: #fff; border-radius: 50%; width: 36px; height: 36px; display: flex; align-items: center; justify-content: center;">LAB</div>
+      <div id="assistant-msg">Welcome! Select an unknown salt from the shelf to begin.</div>
+    </div>
+
+    <!-- ── Left Panel: Salt Shelf + Reagent Shelf ── -->
+    <div id="left-panel">
+
+      <div class="shelf-card">
+        <div class="shelf-label">Unknown Samples</div>
+        <div class="mixtures-grid" id="mixtures-shelf">
+          <button class="salt-btn" data-salt="copper">CuSO₄</button>
+          <button class="salt-btn" data-salt="nickel">NiSO₄</button>
+          <button class="salt-btn" data-salt="cobalt">CoCl₂</button>
+          <button class="salt-btn" data-salt="manganese">MnSO₄</button>
+          <button class="salt-btn" data-salt="iron">FeCl₃</button>
+          <button class="salt-btn" data-salt="random">?</button>
+        </div>
+      </div>
+
+      <div class="shelf-card" style="margin-top:10px">
+        <div class="shelf-label">Reagent Shelf</div>
+        <button class="reagent-btn" data-reagent="NaOH"  disabled>NaOH — Sodium Hydroxide</button>
+        <button class="reagent-btn" data-reagent="NH3"   disabled>NH₃ — Ammonia Solution</button>
+        <button class="reagent-btn" data-reagent="HCl"   disabled>HCl — Hydrochloric Acid</button>
+        <button class="reagent-btn" data-reagent="H2SO4" disabled>H₂SO₄ — Sulphuric Acid</button>
+      </div>
+
+    </div>
+
+    <!-- ── Right Panel: Observation + Notebook ── -->
+    <div id="right-panel">
+
+      <!-- Observation Panel -->
+      <div id="observation-panel">
+        <div class="panel-title">Observation Table</div>
+
+        <div class="obs-row">
+          <span class="obs-label">Volume:</span>
+          <span id="obs-volume">0 mL</span>
+        </div>
+        <div class="obs-row">
+          <span class="obs-label">Actual Colour:</span>
+          <span id="obs-actual-colour">—</span>
+        </div>
+        <div class="obs-row">
+          <span class="obs-label">Reagent Result:</span>
+          <span id="obs-result">—</span>
+        </div>
+        <div class="obs-row">
+          <span class="obs-label">Inference:</span>
+          <span id="obs-inference">—</span>
+        </div>
+      </div>
+
+      <!-- Colour Interpretation Table (RSC reference) -->
+      <div id="colour-table">
+        <div class="panel-title">Colour Table (RSC)</div>
+        <table>
+          <thead><tr><th>Colour</th><th>Interpretation</th></tr></thead>
+          <tbody>
+            <tr><td><span class="ct-swatch" style="background:#e8e8e8"></span>White</td><td>No transition metal</td></tr>
+            <tr><td><span class="ct-swatch" style="background:#c8a27d"></span>Pale Pink/Flesh</td><td>Mn²⁺ present</td></tr>
+            <tr><td><span class="ct-swatch" style="background:#1a7fff"></span>Blue</td><td>Cu²⁺ present</td></tr>
+            <tr><td><span class="ct-swatch" style="background:#00aa44"></span>Green</td><td>Cu²⁺ or Ni²⁺</td></tr>
+            <tr><td><span class="ct-swatch" style="background:#ff5fa0"></span>Pink</td><td>Co²⁺ present</td></tr>
+            <tr><td><span class="ct-swatch" style="background:#cc6600"></span>Orange-Brown</td><td>Fe³⁺ present</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Notebook -->
+      <div id="notebook">
+        <div class="panel-title">Lab Notebook</div>
+        <div id="notebook-entries"><em>No entries yet.</em></div>
+      </div>
+
+    </div>
+
+    <!-- ── Bottom Action Bar ── -->
+    <div id="action-panel">
+      <button class="action-btn" id="btn-add-water" disabled>Add Water</button>
+      <button class="action-btn" id="btn-pour"      disabled>Pour Reagent</button>
+      <button class="action-btn" id="btn-reset">Reset</button>
+    </div>
+
+    <!-- ── Colour Submission Panel (shown after reaction) ── -->
+    <div id="colour-submit-panel" class="hidden floating-panel">
+      <div class="panel-title">Record Your Observation</div>
+      <p class="panel-desc">What colour do you observe in the test tube?</p>
+      <div class="picker-row">
+        <span class="colour-swatch" id="colour-swatch-live"></span>
+        <select id="colour-picker"></select>
+      </div>
+      <button id="btn-submit-colour" class="submit-btn">Submit Observation</button>
+    </div>
+
+    <!-- ── Identification Panel ── -->
+    <div id="id-panel" class="hidden floating-panel">
+      <div class="panel-title">Identify the Metal Ion</div>
+      <p class="panel-desc">Based on your observations, which ion is present?</p>
+      <div id="id-options">
+        <button class="id-btn" data-ion="copper">Cu²⁺ — Copper</button>
+        <button class="id-btn" data-ion="nickel">Ni²⁺ — Nickel</button>
+        <button class="id-btn" data-ion="cobalt">Co²⁺ — Cobalt</button>
+        <button class="id-btn" data-ion="manganese">Mn²⁺ — Manganese</button>
+        <button class="id-btn" data-ion="iron">Fe³⁺ — Iron</button>
+        <button class="id-btn" data-ion="none">No Transition Metal</button>
+      </div>
+    </div>
+
+    <!-- ── Report Panel ── -->
+    <div id="report-panel" class="hidden floating-panel report-wide">
+      <div class="panel-title">Experiment Report</div>
+      <div id="report-content"></div>
+      <div style="display:flex;gap:8px;margin-top:12px;">
+        <button id="btn-download-pdf" class="submit-btn" style="flex:1">Download PDF</button>
+        <button id="btn-new-exp" style="flex:1">New Experiment</button>
+      </div>
+    </div>
+
+    <!-- ── Hint Box ── -->
+    <div id="hint-box" class="hidden">
+      <span id="hint-icon">Hint:</span>
+      <span id="hint-text"></span>
+    </div>
+
+    <!-- Keyboard Guide -->
+    <div id="keyboard-guide">
+      <div id="keyboard-guide-text">Loading controls...</div>
+    </div>
+
+  </div><!-- /ui-overlay -->
+
+  <!-- Three.js Canvas -->
+  <canvas id="lab-canvas"></canvas>
+
+  <!-- CDN Libraries -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+  <!-- App Modules -->
+  <script src="js/chemistry/SaltDatabase.js"></script>
+  <script src="js/chemistry/Reactions.js"></script>
+  <script src="js/chemistry/ObservationEngine.js"></script>
+  <script src="js/chemistry/Scoring.js"></script>
+  <script src="js/apparatus/Rack.js"></script>
+  <script src="js/apparatus/TestTube.js"></script>
+  <script src="js/apparatus/Beaker.js"></script>
+  <script src="js/apparatus/Dropper.js"></script>
+  <script src="js/apparatus/Sink.js"></script>
+  <script src="js/lighting.js"></script>
+  <script src="js/controls.js"></script>
+  <script src="js/ui/ObservationPanel.js"></script>
+  <script src="js/ui/QuizPanel.js"></script>
+  <script src="js/ui/ReportPanel.js"></script>
+  <script src="js/scene.js"></script>
+  <script src="js/main.js"></script>
+  <script>
+    window.addEventListener('DOMContentLoaded', () => {
+      const overlay = document.getElementById('welcome-popup-overlay');
+      const card = document.getElementById('welcome-popup-card');
+      const startBtn = document.getElementById('btn-start-lab');
+
+      // Set initial styles for animation
+      gsap.set(overlay, { opacity: 0, visibility: 'visible' });
+      gsap.set(card, { scale: 0.5, y: 50, opacity: 0 });
+
+      // Animate in
+      gsap.timeline()
+        .to(overlay, { opacity: 1, duration: 0.5, ease: 'power2.out' })
+        .to(card, { scale: 1, y: 0, opacity: 1, duration: 0.8, ease: 'elastic.out(1, 0.75)' }, '-=0.25');
+
+      startBtn.addEventListener('click', () => {
+        gsap.timeline()
+          .to(card, { scale: 0.8, y: -30, opacity: 0, duration: 0.3, ease: 'power2.in' })
+          .to(overlay, { opacity: 0, duration: 0.3, ease: 'power2.in' }, '-=0.2')
+          .add(() => {
+            overlay.remove();
+          });
+      });
+    });
+  </script>
+</body>
+</html>

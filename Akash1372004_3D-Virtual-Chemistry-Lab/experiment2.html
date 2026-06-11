@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Virtual Lab — Experiment 2: Flame Test</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="flame.css" />
+
+</head>
+<body>
+
+  <div id="ui-overlay">
+
+    <!-- Welcome Popup Dialog -->
+    <div id="welcome-popup-overlay">
+      <div id="welcome-popup-card">
+        <div class="welcome-badge">Exp 02</div>
+        <div class="welcome-avatar-area">
+          <svg width="120" height="120" viewBox="0 0 120 120">
+            <!-- Glow background -->
+            <defs>
+              <radialGradient id="avatarGlow" cx="50%" cy="50%" r="50%">
+                <stop offset="0%" stop-color="#34d399" stop-opacity="0.3" />
+                <stop offset="100%" stop-color="#34d399" stop-opacity="0" />
+              </radialGradient>
+              <linearGradient id="gogglesGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#06b6d4" />
+                <stop offset="100%" stop-color="#0891b2" stop-opacity="0.6" />
+              </linearGradient>
+              <linearGradient id="flaskGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                <stop offset="0%" stop-color="#10b981" />
+                <stop offset="100%" stop-color="#047857" />
+              </linearGradient>
+            </defs>
+            <circle cx="60" cy="60" r="54" fill="url(#avatarGlow)" />
+            <circle cx="60" cy="60" r="46" fill="#1e293b" stroke="#047857" stroke-width="2" />
+
+            <!-- Shoulders / Coat -->
+            <path d="M25,100 C25,82 40,76 60,76 C80,76 95,82 95,100 Z" fill="#ffffff" stroke="#cbd5e1"
+              stroke-width="1.5" />
+            <!-- Shirt & Tie -->
+            <path d="M52,76 L68,76 L65,95 L60,100 L55,95 Z" fill="#dc2626" />
+            <path d="M50,70 L60,80 L70,70 L60,73 Z" fill="#e2e8f0" />
+            <path d="M42,76 L60,94 L78,76" fill="none" stroke="#cbd5e1" stroke-width="1.5" />
+
+            <!-- Head / Neck -->
+            <rect x="53" y="62" width="14" height="12" fill="#fed7aa" rx="2" />
+            <path d="M45,34 C45,22 75,22 75,34 C75,56 45,56 45,34 Z" fill="#fed7aa" />
+
+            <!-- Hair -->
+            <path d="M43,32 C43,18 77,18 77,32 C80,24 72,16 60,16 C48,16 40,24 43,32 Z" fill="#0f172a" />
+
+            <!-- Safety Goggles -->
+            <rect x="42" y="32" width="36" height="13" rx="4" fill="url(#gogglesGrad)" stroke="#0891b2"
+              stroke-width="1.5" />
+            <line x1="60" y1="32" x2="60" y2="45" stroke="#0891b2" stroke-width="1.5" />
+            <path d="M40,38 L43,38 M77,38 L80,38" stroke="#0f172a" stroke-width="1.5" />
+
+            <!-- Mouth / Smile -->
+            <path d="M54,54 Q60,59 66,54" stroke="#0f172a" stroke-width="2" stroke-linecap="round" fill="none" />
+
+            <!-- Flask held in hand -->
+            <circle cx="34" cy="85" r="8" fill="#fed7aa" />
+            <path d="M26,85 L32,85 L32,80 L36,80 L36,85 L42,85 L44,98 C44,103 24,103 24,98 Z" fill="url(#flaskGrad)"
+              stroke="#10b981" stroke-width="1" />
+            <ellipse cx="34" cy="80" rx="3" ry="1" fill="#a7f3d0" />
+            <circle cx="34" cy="94" r="5" fill="#34d399" opacity="0.6" filter="blur(1px)" />
+            <circle cx="31" cy="74" r="1.5" fill="#34d399" />
+            <circle cx="37" cy="70" r="1" fill="#34d399" />
+            <circle cx="33" cy="67" r="0.8" fill="#34d399" />
+          </svg>
+        </div>
+        <h2>Welcome to the Virtual Lab</h2>
+        <h3>Experiment 2 — Flame Test</h3>
+        <p>
+          In this experiment, you will perform qualitative flame tests using Concentrated Hydrochloric Acid (HCl) paste to identify characteristic metal cations based on their emissions in the Bunsen burner flame.
+        </p>
+        <div class="welcome-warning">
+          ⚠️ <strong>Safety Protocol:</strong> Concentrated HCl is corrosive. Handle with care and wear virtual safety goggles!
+        </div>
+        <button id="btn-start-lab" class="welcome-start-btn">Begin Analysis</button>
+      </div>
+    </div>
+
+    <!-- ── Top Bar ── -->
+    <div id="topbar">
+      <span id="lab-title">Exp 2 — Flame Test (Conc. HCl Paste Method)</span>
+      <span id="score-display">Score: <b id="score-val">0</b> / 100</span>
+      <a href="index.html" class="home-link">Home</a>
+    </div>
+
+    <!-- ── Step Indicator ── -->
+    <div id="step-indicator">
+      <div class="step" id="ft-step-1">1. Select Sample</div>
+      <div class="step" id="ft-step-2">2. Add HCl</div>
+      <div class="step" id="ft-step-3">3. Make Paste</div>
+      <div class="step" id="ft-step-4">4. Load Wire</div>
+      <div class="step" id="ft-step-5">5. Observe Flame</div>
+      <div class="step" id="ft-step-6">6. Identify</div>
+    </div>
+
+    <!-- ── Lab Assistant ── -->
+    <div id="assistant-panel1">
+      <div id="assistant-avatar" style="font-size: 0.85rem; font-weight: bold; background: #3182ce; color: #fff; border-radius: 50%; width: 36px; height: 36px; display: flex; align-items: center; justify-content: center;">LAB</div>
+      <div id="assistant-msg">Welcome to the Flame Test. Select an unknown substance to begin.</div>
+    </div>
+
+    <!-- ── Left Panel ── -->
+    <div id="left-panel">
+
+      <div class="shelf-card">
+        <div class="shelf-label">Unknown Substances</div>
+        <button class="salt-btn ft-sample-btn" data-sample="random">Random Unknown</button>
+        <button class="salt-btn ft-sample-btn" data-sample="borate">Unknown A</button>
+        <button class="salt-btn ft-sample-btn" data-sample="copper">Unknown B</button>
+        <button class="salt-btn ft-sample-btn" data-sample="strontium">Unknown C</button>
+        <button class="salt-btn ft-sample-btn" data-sample="calcium">Unknown D</button>
+        <button class="salt-btn ft-sample-btn" data-sample="sodium">Unknown E</button>
+        <button class="salt-btn ft-sample-btn" data-sample="potassium">Unknown F</button>
+      </div>
+
+      <!-- Procedure card -->
+      <div class="shelf-card" style="margin-top:10px">
+        <div class="shelf-label">Procedure</div>
+        <div class="proc-mini">
+          <div class="proc-mini-step">Mix substance + 1–2 drops Conc. HCl</div>
+          <div class="proc-mini-step">Form a paste on the wire loop</div>
+          <div class="proc-mini-step">Introduce into <b>non-luminous</b> Bunsen flame</div>
+          <div class="proc-mini-step">Observe the characteristic flame colour</div>
+          <div class="proc-mini-step">Identify the metal cation present</div>
+        </div>
+        <div class="safety-note">Conc. HCl is corrosive. Handle with care.</div>
+      </div>
+
+    </div>
+
+    <!-- ── Right Panel ── -->
+    <div id="right-panel">
+
+      <!-- Observation Panel -->
+      <div id="observation-panel">
+        <div class="panel-title">Observation Table</div>
+        <div class="obs-row">
+          <span class="obs-label">Flame Colour:</span>
+          <span id="ft-obs-flame">—</span>
+        </div>
+        <div class="obs-row">
+          <span class="obs-label">Inference:</span>
+          <span id="ft-obs-inference">—</span>
+        </div>
+      </div>
+
+      <!-- Flame Colour Reference Table -->
+      <div id="colour-table">
+        <div class="panel-title">Flame Colour Table (RSC)</div>
+        <table>
+          <thead><tr><th>Flame Colour</th><th>Inference</th></tr></thead>
+          <tbody>
+            <tr>
+              <td><span class="ct-swatch" style="background:#00dd44"></span>Green</td>
+              <td>Borate / Ba²⁺</td>
+            </tr>
+            <tr>
+              <td><span class="ct-swatch" style="background:#00ffaa"></span>Bluish-Green</td>
+              <td>Cu²⁺</td>
+            </tr>
+            <tr>
+              <td><span class="ct-swatch" style="background:#cc0033"></span>Crimson Red</td>
+              <td>Sr²⁺</td>
+            </tr>
+            <tr>
+              <td><span class="ct-swatch" style="background:#ff5500"></span>Brick Red</td>
+              <td>Ca²⁺</td>
+            </tr>
+            <tr>
+              <td><span class="ct-swatch" style="background:#ffcc00"></span>Intense Yellow</td>
+              <td>Na⁺</td>
+            </tr>
+            <tr>
+              <td><span class="ct-swatch" style="background:#cc44ff"></span>Lilac / Violet</td>
+              <td>K⁺</td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="table-note">Use cobalt-blue glass to distinguish K⁺ from Na⁺</div>
+      </div>
+
+      <!-- Notebook -->
+      <div id="notebook">
+        <div class="panel-title">Lab Notebook</div>
+        <div id="ft-notebook-entries"><em>No entries yet.</em></div>
+      </div>
+
+    </div>
+
+    <!-- ── Bottom Action Bar ── -->
+    <div id="action-panel">
+      <button class="action-btn" id="ft-btn-add-hcl"    disabled>Add Conc. HCl</button>
+      <button class="action-btn" id="ft-btn-make-paste" disabled>Make Paste</button>
+      <button class="action-btn" id="ft-btn-load-wire"  disabled>Load Wire Loop</button>
+      <button class="action-btn" id="ft-btn-ignite"     disabled>Ignite &amp; Observe</button>
+      <button class="action-btn" id="ft-btn-reset">Reset</button>
+    </div>
+
+    <!-- ── Colour Submission Panel ── -->
+    <div id="ft-colour-submit-panel" class="hidden floating-panel">
+      <div class="panel-title">Record Your Flame Observation</div>
+      <p class="panel-desc">What colour do you observe in the Bunsen flame?</p>
+      <div class="picker-row">
+        <span class="colour-swatch" id="ft-colour-swatch-live"></span>
+        <select id="ft-colour-picker"></select>
+      </div>
+      <button id="ft-btn-submit-colour" class="submit-btn">Submit Observation</button>
+    </div>
+
+    <!-- ── Identification Panel ── -->
+    <div id="ft-id-panel" class="hidden floating-panel">
+      <div class="panel-title">Identify the Substance</div>
+      <p class="panel-desc">Based on the flame colour, which substance is present?</p>
+      <div id="ft-id-options">
+        <button class="id-btn ft-id-btn" data-substance="borate">BO₃³⁻ — Borate / Barium</button>
+        <button class="id-btn ft-id-btn" data-substance="copper">Cu²⁺ — Copper</button>
+        <button class="id-btn ft-id-btn" data-substance="strontium">Sr²⁺ — Strontium</button>
+        <button class="id-btn ft-id-btn" data-substance="calcium">Ca²⁺ — Calcium</button>
+        <button class="id-btn ft-id-btn" data-substance="sodium">Na⁺ — Sodium</button>
+        <button class="id-btn ft-id-btn" data-substance="potassium">K⁺ — Potassium</button>
+      </div>
+    </div>
+
+    <!-- ── Report Panel ── -->
+    <div id="ft-report-panel" class="hidden floating-panel report-wide">
+      <div class="panel-title">Experiment Report</div>
+      <div id="ft-report-content"></div>
+      <div style="display:flex;gap:8px;margin-top:12px;">
+        <button id="ft-btn-download-pdf" class="submit-btn" style="flex:1">Download PDF</button>
+        <button id="ft-btn-new-exp" style="flex:1">New Experiment</button>
+      </div>
+    </div>
+
+    <!-- ── Hint Box ── -->
+    <div id="ft-hint-box" class="hidden">
+      <span id="ft-hint-icon">Hint:</span>
+      <span id="ft-hint-text"></span>
+    </div>
+
+    <!-- Keyboard Guide -->
+    <div id="keyboard-guide">
+      <div id="keyboard-guide-text">Loading controls...</div>
+    </div>
+
+  </div><!-- /ui-overlay -->
+
+  <!-- Three.js Canvas -->
+  <canvas id="ft-canvas"></canvas>
+
+  <!-- CDN Libraries -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+  <!-- Shared apparatus (needed by OrbitControls alias) -->
+  <script src="js/controls.js"></script>
+  <script src="js/lighting.js"></script>
+  <script src="js/apparatus/Sink.js"></script>
+
+  <!-- Flame experiment modules -->
+  <script src="js/flame/FlameDatabase.js"></script>
+  <script src="js/flame/FlameScoring.js"></script>
+  <script src="js/flame/FlameObservation.js"></script>
+  <script src="js/flame/FlameScene.js?v=5"></script>
+  <script src="js/flame/FlameMain.js?v=4"></script>
+  <script>
+    window.addEventListener('DOMContentLoaded', () => {
+      const overlay = document.getElementById('welcome-popup-overlay');
+      const card = document.getElementById('welcome-popup-card');
+      const startBtn = document.getElementById('btn-start-lab');
+
+      // Set initial styles for animation
+      gsap.set(overlay, { opacity: 0, visibility: 'visible' });
+      gsap.set(card, { scale: 0.5, y: 50, opacity: 0 });
+
+      // Animate in
+      gsap.timeline()
+        .to(overlay, { opacity: 1, duration: 0.5, ease: 'power2.out' })
+        .to(card, { scale: 1, y: 0, opacity: 1, duration: 0.8, ease: 'elastic.out(1, 0.75)' }, '-=0.25');
+
+      startBtn.addEventListener('click', () => {
+        gsap.timeline()
+          .to(card, { scale: 0.8, y: -30, opacity: 0, duration: 0.3, ease: 'power2.in' })
+          .to(overlay, { opacity: 0, duration: 0.3, ease: 'power2.in' }, '-=0.2')
+          .add(() => {
+            overlay.remove();
+          });
+      });
+    });
+  </script>
+</body>
+</html>

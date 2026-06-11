@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Virtual Lab — Experiment 5: Acid Vapour Tests</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    /* ── Experiment 5 Custom Styles ── */
+    .proc-mini { display: flex; flex-direction: column; gap: 4px; }
+    .proc-mini-step {
+      font-size: .72rem; color: #a0aec0; padding: 3px 0;
+      border-bottom: 1px solid rgba(99,179,237,0.1);
+      line-height: 1.4;
+    }
+    .proc-mini-step:last-child { border-bottom: none; }
+    .safety-note {
+      font-size: .7rem; color: #fc8181;
+      background: rgba(252,129,74,0.08);
+      border: 1px solid rgba(252,129,74,0.25);
+      border-radius: 5px; padding: 5px 8px; margin-top: 4px;
+    }
+    .table-note {
+      font-size: .7rem; color: #718096;
+      margin-top: 6px; padding-top: 5px;
+      border-top: 1px solid rgba(99,179,237,0.12);
+    }
+
+    /* Gas observation rows — stacked layout */
+    .gas-observation {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      padding: 9px 12px;
+      background: rgba(40, 50, 70, 0.5);
+      border: 1px solid rgba(99,179,237,0.15);
+      border-radius: 7px;
+      margin: 6px 0;
+    }
+    .gas-obs-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: .8rem;
+      color: #e2e8f0;
+    }
+    .gas-icon { font-size: 1.2em; flex-shrink: 0; }
+    .gas-observation select {
+      width: 100%;
+      background: rgba(14, 22, 40, 0.9);
+      border: 1px solid rgba(99,179,237,0.3);
+      border-radius: 5px;
+      color: #e2e8f0;
+      padding: 7px 10px;
+      font-size: .78rem;
+      cursor: pointer;
+      outline: none;
+    }
+    .gas-observation select:focus { border-color: #63b3ed; }
+    .gas-observation select option { background: #0d1117; }
+
+    /* Substances Stack */
+    .substances-stack {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      margin-bottom: 6px;
+    }
+    .substances-stack .salt-btn {
+      text-align: center;
+      padding: 8px 12px;
+      font-size: 0.8rem;
+      border-radius: 6px;
+      width: 100%;
+    }
+
+    /* Identification Checkbox List */
+    .id-check-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin: 12px 0;
+    }
+    .id-check-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: rgba(40, 50, 70, 0.4);
+      border: 1px solid rgba(99,179,237,0.15);
+      border-radius: 6px;
+      padding: 8px 12px;
+      cursor: pointer;
+      user-select: none;
+      transition: background 0.2s, border-color 0.2s;
+    }
+    .id-check-item:hover {
+      background: rgba(40, 50, 70, 0.7);
+      border-color: rgba(99,179,237,0.35);
+    }
+    .id-check-item input[type="checkbox"] {
+      width: 16px;
+      height: 16px;
+      cursor: pointer;
+    }
+    .id-check-item span {
+      font-size: 0.85rem;
+      color: #e2e8f0;
+    }
+
+    .floating-panel { z-index: 50; }
+  </style>
+</head>
+<body>
+
+  <div id="ui-overlay">
+
+    <!-- Welcome Popup Dialog -->
+    <div id="welcome-popup-overlay">
+      <div id="welcome-popup-card">
+        <div class="welcome-badge">Exp 05</div>
+        <div class="welcome-avatar-area">
+          <svg width="120" height="120" viewBox="0 0 120 120">
+            <!-- Glow background -->
+            <defs>
+              <radialGradient id="avatarGlow" cx="50%" cy="50%" r="50%">
+                <stop offset="0%" stop-color="#34d399" stop-opacity="0.3" />
+                <stop offset="100%" stop-color="#34d399" stop-opacity="0" />
+              </radialGradient>
+              <linearGradient id="gogglesGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#06b6d4" />
+                <stop offset="100%" stop-color="#0891b2" stop-opacity="0.6" />
+              </linearGradient>
+              <linearGradient id="flaskGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                <stop offset="0%" stop-color="#10b981" />
+                <stop offset="100%" stop-color="#047857" />
+              </linearGradient>
+            </defs>
+            <circle cx="60" cy="60" r="54" fill="url(#avatarGlow)" />
+            <circle cx="60" cy="60" r="46" fill="#1e293b" stroke="#047857" stroke-width="2" />
+
+            <!-- Shoulders / Coat -->
+            <path d="M25,100 C25,82 40,76 60,76 C80,76 95,82 95,100 Z" fill="#ffffff" stroke="#cbd5e1"
+              stroke-width="1.5" />
+            <!-- Shirt & Tie -->
+            <path d="M52,76 L68,76 L65,95 L60,100 L55,95 Z" fill="#dc2626" />
+            <path d="M50,70 L60,80 L70,70 L60,73 Z" fill="#e2e8f0" />
+            <path d="M42,76 L60,94 L78,76" fill="none" stroke="#cbd5e1" stroke-width="1.5" />
+
+            <!-- Head / Neck -->
+            <rect x="53" y="62" width="14" height="12" fill="#fed7aa" rx="2" />
+            <path d="M45,34 C45,22 75,22 75,34 C75,56 45,56 45,34 Z" fill="#fed7aa" />
+
+            <!-- Hair -->
+            <path d="M43,32 C43,18 77,18 77,32 C80,24 72,16 60,16 C48,16 40,24 43,32 Z" fill="#0f172a" />
+
+            <!-- Safety Goggles -->
+            <rect x="42" y="32" width="36" height="13" rx="4" fill="url(#gogglesGrad)" stroke="#0891b2"
+              stroke-width="1.5" />
+            <line x1="60" y1="32" x2="60" y2="45" stroke="#0891b2" stroke-width="1.5" />
+            <path d="M40,38 L43,38 M77,38 L80,38" stroke="#0f172a" stroke-width="1.5" />
+
+            <!-- Mouth / Smile -->
+            <path d="M54,54 Q60,59 66,54" stroke="#0f172a" stroke-width="2" stroke-linecap="round" fill="none" />
+
+            <!-- Flask held in hand -->
+            <circle cx="34" cy="85" r="8" fill="#fed7aa" />
+            <path d="M26,85 L32,85 L32,80 L36,80 L36,85 L42,85 L44,98 C44,103 24,103 24,98 Z" fill="url(#flaskGrad)"
+              stroke="#10b981" stroke-width="1" />
+            <ellipse cx="34" cy="80" rx="3" ry="1" fill="#a7f3d0" />
+            <circle cx="34" cy="94" r="5" fill="#34d399" opacity="0.6" filter="blur(1px)" />
+            <circle cx="31" cy="74" r="1.5" fill="#34d399" />
+            <circle cx="37" cy="70" r="1" fill="#34d399" />
+            <circle cx="33" cy="67" r="0.8" fill="#34d399" />
+          </svg>
+        </div>
+        <h2>Welcome to the Virtual Lab</h2>
+        <h3>Experiment 5 — Concentrated Acid Test</h3>
+        <p>
+          In this experiment, you will perform qualitative analysis of unknown salts using Concentrated Sulphuric Acid (H₂SO₄) to detect acid radical anions like Chloride (Cl⁻), Bromide (Br⁻), and Fluoride (F⁻).
+        </p>
+        <div class="welcome-warning">
+          ⚠️ <strong>Safety Protocol:</strong> Concentrated H₂SO₄ is highly corrosive. Handle with extreme care and wear virtual safety goggles!
+        </div>
+        <button id="btn-start-lab" class="welcome-start-btn">Begin Analysis</button>
+      </div>
+    </div>
+
+    <!-- ── Top Bar ── -->
+    <div id="topbar">
+      <span id="lab-title">Exp 5 — Concentrated Sulphuric Acid Test</span>
+      <span id="score-display">Score: <b id="score-val">0</b> / 100</span>
+      <a href="index.html" class="home-link">Home</a>
+    </div>
+
+    <!-- ── Step Indicator ── -->
+    <div id="step-indicator">
+      <div class="step" id="step-1">1. Select Sample</div>
+      <div class="step" id="step-2">2. Add Acid &amp; Warm</div>
+      <div class="step" id="step-3">3. Observe Fumes</div>
+      <div class="step" id="step-4">4. Vapour Tests</div>
+      <div class="step" id="step-5">5. Identify Ions</div>
+      <div class="step" id="step-6">6. Lab Report</div>
+    </div>
+
+    <!-- ── Lab Assistant ── -->
+    <div id="assistant-panel">
+      <div id="assistant-avatar" style="font-size: 0.85rem; font-weight: bold; background: #3182ce; color: #fff; border-radius: 50%; width: 36px; height: 36px; display: flex; align-items: center; justify-content: center;">LAB</div>
+      <div id="assistant-msg">Welcome! Select one of the 3 chemical substances from the shelf to begin the concentrated acid analysis.</div>
+    </div>
+
+    <!-- ── Left Panel: Mixtures Shelf + Procedure ── -->
+    <div id="left-panel">
+
+      <div class="shelf-card">
+        <div class="shelf-label">Substances</div>
+        <div class="substances-stack" id="mixtures-shelf">
+          <button class="salt-btn" data-sample="sample1">Substance 1</button>
+          <button class="salt-btn" data-sample="sample2">Substance 2</button>
+          <button class="salt-btn" data-sample="sample3">Substance 3</button>
+        </div>
+      </div>
+
+      <!-- Procedure Card -->
+      <div class="shelf-card" style="margin-top:10px">
+        <div class="shelf-label">Procedure</div>
+        <div class="proc-mini">
+          <div class="proc-mini-step">1. Take a small quantity of mixture in a dry test tube</div>
+          <div class="proc-mini-step">2. Add a few drops of Concentrated Sulphuric Acid (Con. H₂SO₄)</div>
+          <div class="proc-mini-step">3. Warm gently over a Bunsen burner flame</div>
+          <div class="proc-mini-step">4. Observe evolved gas/vapour color, odour, and test tube appearance</div>
+          <div class="proc-mini-step">5. Conduct confirmatory rod or paper vapour tests at the tube mouth</div>
+        </div>
+        <div class="safety-note">Caution: Concentrated H₂SO₄ is highly corrosive. Wear safety goggles and warm gently!</div>
+      </div>
+
+    </div>
+
+    <!-- ── Right Panel: Observations ── -->
+    <div id="right-panel">
+
+      <!-- Observation Table -->
+      <div id="observation-panel">
+        <div class="panel-title">Observation Table</div>
+        <div class="obs-row">
+          <span class="obs-label">Mixture:</span>
+          <span id="obs-sample" style="font-size:0.72rem; word-break: break-all;">—</span>
+        </div>
+        <div class="obs-row">
+          <span class="obs-label">Solution/Tube:</span>
+          <span id="obs-solid">—</span>
+        </div>
+        <div class="obs-row">
+          <span class="obs-label">Gas Colour:</span>
+          <span id="obs-gas-colour">—</span>
+        </div>
+        <div class="obs-row">
+          <span class="obs-label">Gas Odour:</span>
+          <span id="obs-gas-odour">—</span>
+        </div>
+        <div class="obs-row">
+          <span class="obs-label">NH₄OH Glass rod:</span>
+          <span id="obs-nh4oh">—</span>
+        </div>
+        <div class="obs-row">
+          <span class="obs-label">Fluorescence paper:</span>
+          <span id="obs-fluorescence">—</span>
+        </div>
+        <div class="obs-row">
+          <span class="obs-label">Water drop rod:</span>
+          <span id="obs-waterdrop">—</span>
+        </div>
+      </div>
+
+      <!-- Reference table -->
+      <div id="colour-table">
+        <div class="panel-title">Acid Vapour Reference</div>
+        <table style="width: 100%; border-collapse: collapse; font-size: .68rem;">
+          <thead>
+            <tr>
+              <th style="padding: 4px; border-bottom: 1px solid rgba(99,179,237,0.2);">Observation</th>
+              <th style="padding: 4px; border-bottom: 1px solid rgba(99,179,237,0.2);">Inference</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td style="padding: 4px; border-bottom: 1px solid rgba(99,179,237,0.1);">Colourless gas, fuming white with NH₄OH rod</td>
+              <td style="padding: 4px; border-bottom: 1px solid rgba(99,179,237,0.1);">Chloride (Cl⁻)</td>
+            </tr>
+            <tr>
+              <td style="padding: 4px; border-bottom: 1px solid rgba(99,179,237,0.1);">Reddish brown vapours, turning moist fluorescence paper red</td>
+              <td style="padding: 4px; border-bottom: 1px solid rgba(99,179,237,0.1);">Bromide (Br⁻)</td>
+            </tr>
+            <tr>
+              <td style="padding: 4px; border-bottom: 1px solid rgba(99,179,237,0.1);">Colourless gas forming white ppt with water drop rod + oily tube</td>
+              <td style="padding: 4px; border-bottom: 1px solid rgba(99,179,237,0.1);">Fluoride (F⁻)</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Lab Notebook -->
+      <div id="notebook">
+        <div class="panel-title">Lab Notebook</div>
+        <div id="notebook-entries"><em>No entries yet.</em></div>
+      </div>
+
+    </div>
+
+    <!-- ── Bottom Action Panel ── -->
+    <div id="action-panel">
+      <button class="action-btn" id="btn-acid" disabled>Add Con. H₂SO₄</button>
+      <button class="action-btn" id="btn-heat" disabled>Warm Test Tube</button>
+      <button class="action-btn" id="btn-waft" disabled>Waft Gas</button>
+      <button class="action-btn" id="btn-test-nh4oh" disabled>NH₄OH Rod Test</button>
+      <button class="action-btn" id="btn-test-fluorescence" disabled>Fluorescence Paper Test</button>
+      <button class="action-btn" id="btn-test-waterdrop" disabled>Water Drop Rod Test</button>
+      <button class="action-btn" id="btn-finish-tests" disabled>Finish &amp; Identify</button>
+      <button class="action-btn" id="btn-reset">Reset</button>
+    </div>
+
+    <!-- ── Initial Observation Panel ── -->
+    <div id="observation-submit-panel" class="hidden floating-panel">
+      <div class="panel-title">Record Acid Warm Observations</div>
+      <p class="panel-desc">Record solid, solution state, and evolved gases on warming.</p>
+      
+      <div class="gas-observation">
+        <div class="gas-obs-header">
+          <span>Test tube / Solution appearance:</span>
+        </div>
+        <select id="solid-hotcold-picker">
+          <option value="">-- Select observation --</option>
+          <option value="none">No physical change / normal solution</option>
+          <option value="oily">Solution acquires oily appearance / glass etched</option>
+        </select>
+      </div>
+
+      <div class="gas-observation">
+        <div class="gas-obs-header">
+          <span>Colour of evolved gas/vapour:</span>
+        </div>
+        <select id="gas-colour-picker">
+          <option value="">-- Select observation --</option>
+          <option value="none">No gas evolved</option>
+          <option value="colourless">Colourless fumes</option>
+          <option value="reddish-brown">Reddish brown vapours</option>
+        </select>
+      </div>
+
+      <div class="gas-observation">
+        <div class="gas-obs-header">
+          <span>Odour of evolved gas:</span>
+        </div>
+        <select id="gas-odour-picker">
+          <option value="">-- Select observation --</option>
+          <option value="none">No gas evolved</option>
+          <option value="odourless">Odourless</option>
+          <option value="pungent">Pungent / suffocating odour</option>
+        </select>
+      </div>
+
+      <button id="btn-submit-obs" class="submit-btn">Submit Observations</button>
+    </div>
+
+    <!-- ── Waft Result Modal ── -->
+    <div id="waft-result-panel" class="hidden floating-panel">
+      <div class="panel-title">Waft Vapours Result</div>
+      <p class="panel-desc">Odour detected during wafting:</p>
+      <div style="font-size: 1.05rem; font-weight: 700; color: var(--accent); text-align: center; margin: 15px 0;" id="waft-result-text"></div>
+      <button id="btn-close-waft" class="submit-btn">Close</button>
+    </div>
+
+    <!-- ── NH4OH Rod Test Modal ── -->
+    <div id="test-nh4oh-panel" class="hidden floating-panel">
+      <div class="panel-title">Ammonium Hydroxide Rod Test</div>
+      <p class="panel-desc">Bringing glass rod dipped in NH₄OH to the mouth of the tube...</p>
+      <div class="gas-observation">
+        <select id="nh4oh-picker">
+          <option value="">-- Select observation --</option>
+          <option value="no-fumes">No fumes observed</option>
+          <option value="dense-white-fumes">Dense white fumes evolve</option>
+        </select>
+      </div>
+      <button id="btn-submit-nh4oh" class="submit-btn">Submit Result</button>
+    </div>
+
+    <!-- ── Fluorescence Paper Test Modal ── -->
+    <div id="test-fluorescence-panel" class="hidden floating-panel">
+      <div class="panel-title">Fluorescence Paper Test</div>
+      <p class="panel-desc">Holding moist fluorescence paper at the test tube mouth...</p>
+      <div class="gas-observation">
+        <select id="fluorescence-picker">
+          <option value="">-- Select observation --</option>
+          <option value="no-change">Paper remains yellow / no change</option>
+          <option value="red">Paper turns red</option>
+        </select>
+      </div>
+      <button id="btn-submit-fluorescence" class="submit-btn">Submit Result</button>
+    </div>
+
+    <!-- ── Water Drop Rod Test Modal ── -->
+    <div id="test-waterdrop-panel" class="hidden floating-panel">
+      <div class="panel-title">Water Drop Glass Rod Test</div>
+      <p class="panel-desc">Bringing glass rod with water drop at tip to the mouth of the tube...</p>
+      <div class="gas-observation">
+        <select id="waterdrop-picker">
+          <option value="">-- Select observation --</option>
+          <option value="no-ppt">Water drop remains clear / no precipitate</option>
+          <option value="white-ppt">White precipitate forms within the water drop</option>
+        </select>
+      </div>
+      <button id="btn-submit-waterdrop" class="submit-btn">Submit Result</button>
+    </div>
+
+    <!-- ── Multi-select Identification Panel ── -->
+    <div id="identification-panel" class="hidden floating-panel">
+      <div class="panel-title">Identify Active Ions</div>
+      <p class="panel-desc">Which acid radical ions are present in the mixture? (Select all that apply)</p>
+      
+      <div class="id-check-list">
+        <label class="id-check-item" id="lbl-id-chloride">
+          <input type="checkbox" id="chk-id-chloride" class="id-checkbox" />
+          <span>Chloride (Cl⁻)</span>
+        </label>
+        <label class="id-check-item" id="lbl-id-bromide">
+          <input type="checkbox" id="chk-id-bromide" class="id-checkbox" />
+          <span>Bromide (Br⁻)</span>
+        </label>
+        <label class="id-check-item" id="lbl-id-fluoride">
+          <input type="checkbox" id="chk-id-fluoride" class="id-checkbox" />
+          <span>Fluoride (F⁻)</span>
+        </label>
+      </div>
+
+      <button id="btn-submit-id" class="submit-btn">Submit Identification</button>
+    </div>
+
+    <!-- ── Report Panel ── -->
+    <div id="report-panel" class="hidden floating-panel report-wide">
+      <div class="panel-title">Experiment Report</div>
+      <div id="report-content"></div>
+      <div style="display:flex; gap:8px; margin-top:12px;">
+        <button id="btn-download-pdf" class="submit-btn" style="flex:1">Download PDF</button>
+        <button id="btn-new-exp" style="flex:1">New Experiment</button>
+      </div>
+    </div>
+
+    <!-- ── Hint Box ── -->
+    <div id="hint-box" class="hidden">
+      <span id="hint-icon">Hint:</span>
+      <span id="hint-text"></span>
+    </div>
+
+    <!-- Keyboard Guide -->
+    <div id="keyboard-guide">
+      <div id="keyboard-guide-text">Loading controls...</div>
+    </div>
+
+  </div>
+
+  <!-- Three.js Canvas -->
+  <canvas id="lab-canvas"></canvas>
+
+  <!-- CDN Libraries -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+  <!-- Shared modules -->
+  <script src="js/chemistry/ObservationEngine.js"></script>
+  <script src="js/apparatus/Sink.js"></script>
+  <script src="js/apparatus/Dropper.js"></script>
+  <script src="js/lighting.js"></script>
+  <script src="js/controls.js"></script>
+
+  <!-- 3D Scene Loader -->
+  <script src="js/scene5.js"></script>
+
+  <!-- Chemistry Logic -->
+  <script src="js/chemistry/AcidTest.js"></script>
+  <script>
+    window.addEventListener('DOMContentLoaded', () => {
+      const overlay = document.getElementById('welcome-popup-overlay');
+      const card = document.getElementById('welcome-popup-card');
+      const startBtn = document.getElementById('btn-start-lab');
+
+      // Set initial styles for animation
+      gsap.set(overlay, { opacity: 0, visibility: 'visible' });
+      gsap.set(card, { scale: 0.5, y: 50, opacity: 0 });
+
+      // Animate in
+      gsap.timeline()
+        .to(overlay, { opacity: 1, duration: 0.5, ease: 'power2.out' })
+        .to(card, { scale: 1, y: 0, opacity: 1, duration: 0.8, ease: 'elastic.out(1, 0.75)' }, '-=0.25');
+
+      startBtn.addEventListener('click', () => {
+        gsap.timeline()
+          .to(card, { scale: 0.8, y: -30, opacity: 0, duration: 0.3, ease: 'power2.in' })
+          .to(overlay, { opacity: 0, duration: 0.3, ease: 'power2.in' }, '-=0.2')
+          .add(() => {
+            overlay.remove();
+          });
+      });
+    });
+  </script>
+</body>
+</html>
