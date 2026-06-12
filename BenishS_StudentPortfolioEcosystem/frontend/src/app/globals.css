@@ -1,0 +1,330 @@
+@import "tailwindcss";
+
+/* =========================================================
+   BASE / DEFAULT VARIABLES — Academic: MCC Crimson & Gold
+   ========================================================= */
+:root, .theme-academic {
+  --background: #fdfbf7;
+  --foreground: #221510;
+  --primary: #940026; /* Deep crimson red */
+  --primary-hover: #6e001a;
+  --accent: #d4af37; /* Warm bright gold */
+  --card-bg: rgba(255, 255, 255, 0.82);
+  --card-border: rgba(148, 0, 38, 0.12);
+  --shadow: rgba(148, 0, 38, 0.04);
+  --input-bg: rgba(255, 255, 255, 0.7);
+  --font-display: 'Georgia', serif;
+}
+
+.theme-corporate {
+  --background: #f1f5f9; /* Modern slate light gray */
+  --foreground: #0f172a; /* Slate dark */
+  --primary: #1e3a8a; /* Tech Navy Blue */
+  --primary-hover: #172554;
+  --accent: #3b82f6; /* Modern Blue */
+  --card-bg: rgba(255, 255, 255, 0.9);
+  --card-border: rgba(30, 58, 138, 0.08);
+  --shadow: rgba(15, 23, 42, 0.04);
+  --input-bg: rgba(248, 250, 252, 0.85);
+  --font-display: inherit;
+}
+
+.theme-startup {
+  --background: #f4fbf7; /* Fresh mint/emerald background */
+  --foreground: #064e3b; /* Deep emerald text */
+  --primary: #059669; /* Emerald Green */
+  --primary-hover: #047857;
+  --accent: #4f46e5; /* Indigo */
+  --card-bg: rgba(255, 255, 255, 0.88);
+  --card-border: rgba(5, 150, 105, 0.08);
+  --shadow: rgba(5, 150, 105, 0.03);
+  --input-bg: rgba(252, 253, 253, 0.85);
+  --font-display: inherit;
+}
+
+.theme-creative {
+  --background: #faf5ff; /* Soft lavender background */
+  --foreground: #3b0764; /* Deep violet text */
+  --primary: #a855f7; /* Vibrant purple */
+  --primary-hover: #9333ea;
+  --accent: #ec4899; /* Bright pink */
+  --card-bg: rgba(255, 255, 255, 0.75);
+  --card-border: rgba(168, 85, 247, 0.15);
+  --shadow: rgba(168, 85, 247, 0.05);
+  --input-bg: rgba(252, 250, 253, 0.8);
+  --font-display: inherit;
+}
+
+.theme-futuristic {
+  --background: #060b19; /* Sleek cyber dark navy space background */
+  --foreground: #e0f2fe; /* Light sky text */
+  --primary: #00f2fe; /* Glowing cyber cyan */
+  --primary-hover: #38bdf8;
+  --accent: #a855f7; /* Cyber neon purple */
+  --card-bg: rgba(11, 20, 38, 0.65); /* Translucent dark tech card */
+  --card-border: rgba(0, 242, 254, 0.2);
+  --shadow: rgba(0, 242, 254, 0.1);
+  --input-bg: rgba(11, 20, 38, 0.65);
+  --font-display: inherit;
+}
+
+/* =========================================================
+   DARK MODE — Applied via .dark class on <html>
+   ========================================================= */
+.dark {
+  --background: #0f0d13; /* Deep dark violet */
+  --foreground: #f4f0ec;
+  --primary: #ff5c7d; /* Neon rose */
+  --primary-hover: #ff859d;
+  --accent: #ffd166; /* Vibrant sun yellow */
+  --card-bg: rgba(26, 21, 29, 0.8);
+  --card-border: rgba(255, 92, 125, 0.2);
+  --shadow: rgba(0, 0, 0, 0.5);
+  --input-bg: rgba(35, 28, 33, 0.65);
+}
+
+.dark .theme-corporate {
+  --background: #090d16; /* Midnight corporate slate */
+  --foreground: #e2e8f0;
+  --primary: #3b82f6; /* Bright digital blue */
+  --primary-hover: #60a5fa;
+  --accent: #60a5fa;
+  --card-bg: rgba(15, 23, 42, 0.8);
+  --card-border: rgba(59, 130, 246, 0.2);
+  --shadow: rgba(0, 0, 0, 0.5);
+  --input-bg: rgba(15, 23, 42, 0.7);
+}
+
+.dark .theme-startup {
+  --background: #020f0a; /* Dark forest green */
+  --foreground: #ecfdf5;
+  --primary: #10b981; /* Bright emerald */
+  --primary-hover: #34d399;
+  --accent: #818cf8;
+  --card-bg: rgba(6, 25, 18, 0.8);
+  --card-border: rgba(16, 185, 129, 0.2);
+  --shadow: rgba(0, 0, 0, 0.5);
+  --input-bg: rgba(6, 25, 18, 0.7);
+}
+
+.dark .theme-creative {
+  --background: #110321; /* Rich dark magenta space */
+  --foreground: #f3e8ff;
+  --primary: #d946ef; /* Bright magenta */
+  --primary-hover: #e879f9;
+  --accent: #f472b6;
+  --card-bg: rgba(28, 7, 50, 0.75);
+  --card-border: rgba(217, 70, 239, 0.25);
+  --shadow: rgba(0, 0, 0, 0.55);
+  --input-bg: rgba(28, 7, 50, 0.7);
+}
+
+/* =========================================================
+   @THEME — Tailwind v4 CSS token mapping
+   ========================================================= */
+@theme {
+  --color-theme-bg: var(--background);
+  --color-theme-fg: var(--foreground);
+  --color-theme-primary: var(--primary);
+  --color-theme-primary-hover: var(--primary-hover);
+  --color-theme-accent: var(--accent);
+  --color-theme-card: var(--card-bg);
+  --color-theme-border: var(--card-border);
+  --font-display: var(--font-display);
+  --font-sans: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+
+/* =========================================================
+   BASE STYLES
+   ========================================================= */
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans);
+  font-feature-settings: 'cv11', 'ss01';
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  transition: background-color 0.3s ease, color 0.3s ease;
+  min-height: 100vh;
+  line-height: 1.6;
+}
+
+/* =========================================================
+   GLASSMORPHISM
+   ========================================================= */
+.glass {
+  background: var(--card-bg);
+  backdrop-filter: blur(14px) saturate(140%);
+  -webkit-backdrop-filter: blur(14px) saturate(140%);
+  border: 1px solid var(--card-border);
+  box-shadow: 0 4px 24px 0 var(--shadow), 0 1px 0 0 rgba(255,255,255,0.06) inset;
+}
+
+/* =========================================================
+   FORM ELEMENTS — Polished input focus states
+   ========================================================= */
+input, textarea, select {
+  background: var(--input-bg) !important;
+  color: var(--foreground);
+  border: 1px solid var(--card-border);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+}
+
+input::placeholder, textarea::placeholder {
+  color: color-mix(in srgb, var(--foreground) 35%, transparent);
+}
+
+input:focus, textarea:focus, select:focus {
+  outline: none;
+  border-color: var(--primary) !important;
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--primary) 15%, transparent);
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator {
+  opacity: 0.5;
+  cursor: pointer;
+}
+
+/* =========================================================
+   SCROLLBAR
+   ========================================================= */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--card-border);
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: color-mix(in srgb, var(--primary) 40%, transparent);
+}
+
+/* =========================================================
+   THEME TOGGLE TRANSITION — Prevents flash
+   ========================================================= */
+html.dark-transition,
+html.dark-transition *,
+html.dark-transition *::before,
+html.dark-transition *::after {
+  transition-duration: 0ms !important;
+}
+
+/* =========================================================
+   SELECTION COLOR
+   ========================================================= */
+::selection {
+  background: color-mix(in srgb, var(--primary) 25%, transparent);
+  color: var(--foreground);
+}
+
+/* =========================================================
+   UTILITY CLASSES
+   ========================================================= */
+.text-balance {
+  text-wrap: balance;
+}
+
+/* Sidebar nav active indicator */
+.nav-active {
+  position: relative;
+}
+.nav-active::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 25%;
+  bottom: 25%;
+  width: 3px;
+  background: var(--primary);
+  border-radius: 0 4px 4px 0;
+}
+
+/* Smooth glow on hover for cards */
+.card-hover {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.card-hover:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 40px var(--shadow);
+}
+
+/* Badge */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 10px;
+  border-radius: 999px;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  background: color-mix(in srgb, var(--primary) 12%, transparent);
+  color: var(--primary);
+  border: 1px solid color-mix(in srgb, var(--primary) 20%, transparent);
+}
+
+/* =========================================================
+   PRINT STYLES — Resume PDF Export
+   ========================================================= */
+@media print {
+  /* Force exact color and background rendering */
+  html, body {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+    background-color: var(--background) !important;
+    color: var(--foreground) !important;
+  }
+
+  body {
+    font-family: var(--font-sans) !important;
+    background-color: var(--background) !important;
+    color: var(--foreground) !important;
+  }
+  
+  .no-print, nav, header, footer, button, .fixed, [role="navigation"], .no-print-element {
+    display: none !important;
+  }
+  
+  main {
+    padding: 0 !important;
+    margin: 0 !important;
+    max-width: 100% !important;
+  }
+  
+  .glass {
+    background: var(--card-bg) !important;
+    border: 1px solid var(--card-border) !important;
+    box-shadow: 0 8px 32px var(--shadow) !important;
+    backdrop-filter: blur(12px) !important;
+    -webkit-backdrop-filter: blur(12px) !important;
+  }
+  
+  /* Retain standard grid columns on print */
+  .grid { display: grid !important; }
+  .grid-cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; }
+  .grid-cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)) !important; }
+  .grid-cols-5 { grid-template-columns: repeat(5, minmax(0, 1fr)) !important; }
+  
+  /* Avoid page break splits inside cards or sections */
+  section, .glass, .space-y-4, .space-y-3 {
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+  }
+
+  @page {
+    margin: 12mm 10mm;
+  }
+}
