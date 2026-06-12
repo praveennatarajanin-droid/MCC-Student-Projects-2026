@@ -1,0 +1,98 @@
+/* UploadDesignAndCheckout layout */
+.upload-design-page {
+  padding: 24px;
+  max-width: 980px;
+  margin: 0 auto;
+  background: #fff;
+  border-radius: 28px;
+  border: 1px solid #ece7e4;
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.08);
+}
+
+.upload-design-page h1 {
+  text-align: center;
+  margin-bottom: 24px;
+  font-size: 2rem;
+  color: #3c1b26;
+}
+
+.upload-section {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  margin-bottom: 30px;
+}
+
+.upload-input {
+  flex: 1;
+  min-width: 240px;
+  padding: 14px 16px;
+  border-radius: 18px;
+  border: 1px solid #ddd;
+  background: #fbf6f3;
+  cursor: pointer;
+}
+
+.clear-canvas-btn,
+.checkout-btn {
+  border-radius: 18px;
+  font-size: 1rem;
+  padding: 14px 24px;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.2s ease, transform 0.2s ease;
+}
+
+.clear-canvas-btn {
+  background-color: #80002f;
+  color: #fff;
+}
+
+.clear-canvas-btn:hover {
+  background-color: #9d1b47;
+}
+
+.canvas-container {
+  border-radius: 24px;
+  padding: 22px;
+  background: #f7f2ef;
+  border: 1px solid #ece7e4;
+  min-height: 440px;
+}
+
+.canvas-container canvas {
+  width: 100%;
+  height: 400px;
+  display: block;
+  border-radius: 18px;
+  background: #fff;
+}
+
+.checkout-section {
+  display: flex;
+  justify-content: center;
+  margin-top: 26px;
+}
+
+.checkout-btn {
+  background-color: #2a6f4e;
+  color: #fff;
+}
+
+.checkout-btn:hover {
+  background-color: #1d523d;
+}
+
+@media (max-width: 820px) {
+  .upload-section {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .checkout-section {
+    margin-top: 20px;
+  }
+}
+  

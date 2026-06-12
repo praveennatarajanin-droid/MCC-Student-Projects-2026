@@ -1,0 +1,404 @@
+.varnam-page {
+  width: 100%;
+  min-height: 100vh;
+  background: var(--bg);
+  display: flex;
+  flex-direction: column;
+  color: var(--text);
+}
+
+.varnam-header {
+  position: relative;
+  width: 100%;
+  min-height: 420px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-size: cover;
+  background-position: center;
+}
+
+.header-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(20, 20, 20, 0.42), rgba(140, 29, 52, 0.65));
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem 1.5rem;
+  text-align: center;
+}
+
+.varnam-logo {
+  width: 110px;
+  height: auto;
+  margin-bottom: 1rem;
+  filter: drop-shadow(0 12px 18px rgba(0, 0, 0, 0.3));
+}
+
+.varnam-header h1 {
+  font-size: clamp(2.4rem, 4vw, 3.5rem);
+  color: #fff;
+  margin-bottom: 0.75rem;
+}
+
+.varnam-header p {
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 1.05rem;
+  letter-spacing: 0.08em;
+}
+
+.varnam-header button {
+  margin-top: 1.75rem;
+  padding: 0.95rem 1.85rem;
+  border-radius: 999px;
+  background: linear-gradient(135deg, var(--primary), var(--primary-soft));
+  color: #fff;
+}
+
+.varnam-about,
+.our-work,
+.statistics-section {
+  padding: 5rem 1.5rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.varnam-about h2,
+.our-work h2,
+.statistics-section h2 {
+  font-size: clamp(2.4rem, 4vw, 3.2rem);
+  margin-bottom: 1rem;
+}
+
+.varnam-about h3 {
+  font-size: 1.2rem;
+  margin-bottom: 1.5rem;
+  color: var(--text-muted);
+}
+
+.varnam-about p {
+  max-width: 900px;
+  margin: 0 auto;
+  line-height: 1.85;
+  color: var(--text-muted);
+  font-size: 1rem;
+}
+
+.read-more-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin: 2rem auto 0;
+  padding: 0.95rem 1.8rem;
+  border-radius: 999px;
+  background: var(--surface);
+  color: var(--primary);
+  border: 1px solid rgba(140, 29, 52, 0.18);
+  box-shadow: 0 18px 28px rgba(140, 29, 52, 0.08);
+  transition: transform 0.2s ease, background-color 0.2s ease;
+}
+
+.read-more-btn:hover {
+  transform: translateY(-1px);
+  background-color: var(--surface-soft);
+}
+
+.our-work {
+  padding-top: 0;
+}
+
+.work-container {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1.5rem;
+  margin-top: 2rem;
+}
+
+.work-card {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  background: var(--surface);
+  border-radius: var(--radius);
+  padding: 1.75rem;
+  box-shadow: var(--shadow);
+  border: 1px solid rgba(140, 29, 52, 0.08);
+}
+
+.work-card img {
+  width: 100%;
+  height: 220px;
+  object-fit: cover;
+  border-radius: 20px;
+}
+
+.work-card h3 {
+  margin: 0;
+  font-size: 1.35rem;
+}
+
+.work-card p {
+  margin: 0;
+  color: var(--text-muted);
+  line-height: 1.7;
+}
+
+.statistics-section {
+  background: var(--surface);
+  border-radius: var(--radius);
+  border: 1px solid rgba(140, 29, 52, 0.08);
+  box-shadow: var(--shadow);
+  padding: 3rem 2rem;
+}
+
+.statistics-section {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 1.25rem;
+}
+
+.stat-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.85rem;
+  padding: 1.5rem;
+  border-radius: 1.5rem;
+  background: rgba(248, 235, 228, 0.75);
+  text-align: center;
+}
+
+.stat-card img {
+  width: 52px;
+  height: 52px;
+}
+
+.stat-number {
+  margin: 0;
+  font-size: 2.45rem;
+  color: var(--primary);
+}
+
+.stat-card p {
+  margin: 0;
+  color: var(--text-muted);
+}
+
+.modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(9, 9, 9, 0.72);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  position: relative;
+  width: min(900px, 90vw);
+}
+
+.modal-image {
+  width: 100%;
+  height: auto;
+  border-radius: 24px;
+}
+
+.close {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  color: #fff;
+  font-size: 2.2rem;
+  cursor: pointer;
+}
+
+@media (max-width: 1024px) {
+  .work-container,
+  .statistics-section {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 720px) {
+  .varnam-header {
+    min-height: 340px;
+  }
+
+  .varnam-about,
+  .our-work,
+  .statistics-section {
+    padding: 3rem 1rem;
+  }
+
+  .work-container,
+  .statistics-section {
+    grid-template-columns: 1fr;
+  }
+}
+
+  
+  .slider-content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+  }
+  
+  .slider-image {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+    border-radius: 8px; /* Optional for rounded corners */
+  }
+  
+  .next-arrow {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(0, 0, 0, 0.5);
+    color: #fff;
+    border: none;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    font-size: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background 0.3s ease;
+  }
+  
+  .next-arrow:hover {
+    background: rgba(0, 0, 0, 0.8);
+  }
+  
+  .varnam-album h2{
+    font-size: 3.2rem;
+    line-height: 1.1;
+    margin-bottom: 2rem;
+    font-weight: 400;
+    font-family: 'Playfair Display', serif;
+    letter-spacing: -0.03em;
+    color: #000000;
+    text-align: left;
+  }
+  
+  .varnam-container {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px; /* Adds spacing between sections */
+    padding: 20px;
+}
+
+.varnam-section {
+    flex: 1; /* Ensures equal width */
+    border: 2px solid #ddd;
+    border-radius: 50px;
+    padding: 10px;
+    background-color: #f9f9f9;
+}
+
+.varnam-services {
+    background-color: #fff4e6; /* Light orange tone */
+}
+
+.varnam-contact {
+    background-color: #fff4e6; /* Light blue tone */
+}
+
+.our-work {
+  text-align: center;
+  padding: 50px 20px;
+  background-color: #fff;
+}
+
+
+
+.work-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 30px;
+  margin-top: 30px;
+}
+
+
+
+
+
+.work-card img {
+  width: 100px;
+  height: 100px;
+  margin-bottom: 15px;
+}
+
+.work-card h3 {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #000;
+}
+
+.work-card p {
+  font-size: 1rem;
+  color: #555;
+  margin-bottom: 15px;
+}
+
+.read-more-btn {
+  padding: 10px 15px;
+  background-color: #ff4d4d;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.read-more-btn:hover {
+  background-color: #e63939;
+}
+
+
+/* Statistics Section */
+.statistics-section {
+  display: flex;
+  justify-content: space-between;
+  background-color: #fff;
+  padding: 50px 5%;
+  border-radius: 8px;
+  text-align: center;
+}
+
+
+
+.stat-card img {
+  width: 80px;
+  height: 80px;
+  margin-bottom: 10px;
+}
+
+.stat-number {
+  font-size: 2.5rem;
+  font-weight: bold;
+  margin-bottom: 5px;
+  transition: all 0.3s ease-in-out;
+}
+
+.stat-blue { color: #3da5f5; }
+.stat-yellow { color: #ffcc00; }
+.stat-green { color: #2db57c; }
+.stat-purple { color: #8b5cf6; }
+
+.stat-card p {
+  font-size: 1rem;
+  color: #333;
+}
+
+

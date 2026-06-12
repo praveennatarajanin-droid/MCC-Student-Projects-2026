@@ -1,0 +1,83 @@
+﻿/* Products.css */
+
+.products-page {
+    padding: 2rem;
+    font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Open Sans', sans-serif;
+    background: linear-gradient(180deg, rgba(92, 60, 146, 0.06) 0%, rgba(239, 243, 249, 1) 100%);
+}
+
+.products-header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 2.5rem;
+    width: 100%;
+    max-width: 1200px;
+}
+
+.products-header h1 {
+    color: var(--text);
+    margin: 0;
+    font-size: clamp(2.2rem, 2.6vw, 3rem);
+    letter-spacing: -0.03em;
+    text-align: center;
+}
+
+.view-toggle {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-top: 1.5rem;
+}
+
+.toggle-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.65rem;
+    padding: 0.95rem 1.5rem;
+    border: 1px solid transparent;
+    border-radius: 999px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.25s ease, color 0.25s ease, transform 0.25s ease, border-color 0.25s ease;
+    background-color: var(--surface);
+    color: var(--text);
+    box-shadow: 0 10px 24px rgba(92, 60, 146, 0.08);
+}
+
+.toggle-btn:hover {
+    background-color: var(--surface-soft);
+    transform: translateY(-1px);
+}
+
+.toggle-btn.active {
+    background: linear-gradient(135deg, var(--primary), var(--primary-soft));
+    color: #fff;
+}
+
+.products-content {
+    background: var(--surface);
+    border-radius: 28px;
+    box-shadow: var(--shadow);
+    padding: 2rem;
+}
+
+@media (max-width: 768px) {
+    .products-page {
+        padding: 1rem;
+    }
+
+    .products-header {
+        align-items: flex-start;
+    }
+
+    .view-toggle {
+        width: 100%;
+    }
+
+    .toggle-btn {
+        flex: 1;
+        justify-content: center;
+    }
+}

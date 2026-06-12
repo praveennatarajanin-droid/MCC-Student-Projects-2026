@@ -1,0 +1,75 @@
+.customization-container {
+  display: flex;
+  gap: 20px;
+  padding: 20px;
+}
+
+.sidebar {
+  width: 200px;
+  border-right: 1px solid #ccc;
+  padding-right: 10px;
+}
+
+.sidebar-item {
+  margin-bottom: 15px;
+  text-align: center;
+  cursor: grab;
+}
+
+.sidebar-image {
+  width: 80px;
+  height: 80px;
+  object-fit: contain;
+  display: block;
+  margin: 0 auto;
+}
+
+.canvas {
+  flex: 1;
+  text-align: center;
+}
+
+.canvas-title {
+  margin-bottom: 10px;
+}
+
+.napkin-area {
+  position: relative;
+  width: 400px;
+  height: 400px;
+  margin: 0 auto;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  background: #f9f9f9;
+  overflow: hidden;
+}
+
+.napkin-element.color {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.design-element {
+  position: absolute;
+  width: 80px;
+  height: 80px;
+  cursor: move;
+  pointer-events: auto;
+}
+
+.save-button {
+  margin-top: 15px;
+  padding: 10px 20px;
+  background-color: #4caf50;
+  border: none;
+  border-radius: 8px;
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.save-button:hover {
+  background-color: #45a049;
+}

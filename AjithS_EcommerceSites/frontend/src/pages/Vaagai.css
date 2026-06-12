@@ -1,0 +1,128 @@
+.vaagai-page {
+  width: 100%;
+  min-height: 100vh;
+  background: var(--bg);
+  display: flex;
+  flex-direction: column;
+  color: var(--text);
+}
+
+.vaagai-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  min-height: 320px;
+  padding: 3rem 1.5rem;
+  background: linear-gradient(135deg, rgba(140, 29, 52, 0.9), rgba(212, 169, 123, 0.9));
+  color: #fff;
+}
+
+.vaagai-logo {
+  width: 110px;
+  height: auto;
+  margin-bottom: 1rem;
+  filter: drop-shadow(0 18px 28px rgba(0, 0, 0, 0.25));
+}
+
+.vaagai-header h1 {
+  font-size: clamp(2.3rem, 4vw, 3rem);
+  margin: 0;
+}
+
+.vaagai-header p {
+  margin-top: 0.8rem;
+  max-width: 640px;
+  font-size: 1.05rem;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.vaagai-about,
+.vaagai-container {
+  padding: 4rem 1.5rem;
+  max-width: 1150px;
+  margin: 0 auto;
+}
+
+.vaagai-about h2,
+.vaagai-services h2,
+.vaagai-contact h2 {
+  font-size: clamp(2.2rem, 3.6vw, 2.8rem);
+  margin-bottom: 1.1rem;
+  color: var(--text);
+}
+
+.vaagai-about p,
+.vaagai-contact p,
+.vaagai-services li {
+  color: var(--text-muted);
+  line-height: 1.8;
+}
+
+.vaagai-about p {
+  max-width: 760px;
+  margin: 0 auto;
+}
+
+.vaagai-services ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.vaagai-services li {
+  position: relative;
+  padding-left: 1.7rem;
+  margin-bottom: 0.85rem;
+}
+
+.vaagai-services li::before {
+  content: "✓";
+  position: absolute;
+  left: 0;
+  top: 0;
+  color: var(--primary);
+  font-weight: 700;
+}
+
+.vaagai-container {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1.5rem;
+}
+
+.vaagai-section {
+  background: var(--surface);
+  border-radius: var(--radius);
+  padding: 2rem;
+  box-shadow: var(--shadow);
+  border: 1px solid rgba(140, 29, 52, 0.08);
+}
+
+.vaagai-contact {
+  display: grid;
+  gap: 1rem;
+}
+
+.vaagai-contact button {
+  width: max-content;
+  padding: 0.95rem 1.7rem;
+  background: linear-gradient(135deg, var(--primary), var(--primary-soft));
+  color: #fff;
+}
+
+.vaagai-contact button:hover {
+  filter: brightness(1.05);
+}
+
+@media (max-width: 860px) {
+  .vaagai-container {
+    grid-template-columns: 1fr;
+  }
+
+  .vaagai-about,
+  .vaagai-container {
+    padding: 2.5rem 1rem;
+  }
+}

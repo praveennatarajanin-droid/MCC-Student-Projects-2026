@@ -1,0 +1,168 @@
+.cupcoaster-page {
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: var(--bg);
+  color: var(--text);
+}
+
+.cupcoaster-page-content {
+  flex: 1;
+  width: 100%;
+  max-width: 1240px;
+  margin: 0 auto;
+  padding: 3rem 1.5rem 4rem;
+}
+
+.cupcoaster-page h1 {
+  margin: 0 0 1.5rem;
+  font-size: clamp(2.2rem, 3vw, 3rem);
+  text-align: center;
+  color: var(--text);
+}
+
+.loading,
+.error-message {
+  max-width: 920px;
+  margin: 0 auto 1.25rem;
+  padding: 1.25rem 1.5rem;
+  border-radius: 1.5rem;
+  text-align: center;
+}
+
+.loading {
+  color: var(--text-muted);
+  background: rgba(224, 224, 224, 0.18);
+}
+
+.error-message {
+  color: #9d1d33;
+  background: rgba(196, 77, 99, 0.12);
+}
+
+.product-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1.75rem;
+  padding-top: 1.5rem;
+}
+
+.product-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  border-radius: var(--radius);
+  padding: 1.5rem;
+  background: var(--surface);
+  border: 1px solid rgba(140, 29, 52, 0.08);
+  box-shadow: var(--shadow);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.product-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 24px 36px rgba(61, 46, 42, 0.12);
+}
+
+.product-image {
+  width: 100%;
+  height: 240px;
+  object-fit: cover;
+  border-radius: 22px;
+  margin-bottom: 1.25rem;
+  background: var(--surface-soft);
+}
+
+.product-card h3 {
+  margin: 0 0 0.85rem;
+  font-size: 1.25rem;
+  color: var(--text);
+}
+
+.product-description,
+.product-size {
+  margin: 0 0 0.85rem;
+  color: var(--text-muted);
+  line-height: 1.75;
+  font-size: 0.95rem;
+}
+
+.product-price {
+  margin: 0 0 0.35rem;
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: var(--primary);
+}
+
+.original-price {
+  font-size: 0.95rem;
+  color: var(--text-muted);
+  text-decoration: line-through;
+}
+
+.add-to-cart-btn,
+.out-of-stock-btn {
+  width: 100%;
+  padding: 0.95rem 1.1rem;
+  border-radius: 18px;
+  font-weight: 700;
+  border: none;
+  transition: transform 0.2s ease, filter 0.2s ease;
+}
+
+.add-to-cart-btn {
+  background: linear-gradient(135deg, var(--primary), var(--primary-soft));
+  color: #fff;
+}
+
+.add-to-cart-btn:hover {
+  transform: translateY(-1px);
+  filter: brightness(1.05);
+}
+
+.out-of-stock-btn {
+  background: rgba(140, 29, 52, 0.08);
+  color: var(--text-muted);
+  cursor: not-allowed;
+}
+
+.design-steps {
+  margin-top: 3rem;
+  padding: 2rem;
+  background: var(--surface);
+  border-radius: var(--radius);
+  border: 1px solid rgba(140, 29, 52, 0.08);
+  box-shadow: var(--shadow);
+}
+
+.design-steps h3 {
+  margin: 0 0 1.5rem;
+  color: var(--text);
+}
+
+.design-options {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1rem;
+}
+
+.design-option {
+  padding: 1.15rem 1.4rem;
+  border-radius: 20px;
+  background: linear-gradient(135deg, rgba(140, 29, 52, 0.08), rgba(212, 169, 123, 0.12));
+  border: 1px solid rgba(140, 29, 52, 0.08);
+  color: var(--text);
+  text-align: center;
+}
+
+.design-option:hover {
+  transform: translateY(-1px);
+  background: linear-gradient(135deg, rgba(140, 29, 52, 0.12), rgba(212, 169, 123, 0.16));
+}
+
+@media (max-width: 720px) {
+  .cupcoaster-page-content {
+    padding: 2rem 1rem 3rem;
+  }
+}

@@ -1,0 +1,133 @@
+.siragugal-page {
+  width: 100%;
+  min-height: 100vh;
+  background: var(--bg);
+  display: flex;
+  flex-direction: column;
+  color: var(--text);
+}
+
+.siragugal-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  min-height: 320px;
+  padding: 3rem 1.5rem;
+  background: linear-gradient(135deg, rgba(140, 29, 52, 0.9), rgba(247, 194, 138, 0.9));
+  color: #fff;
+}
+
+.siragugal-logo {
+  width: 100px;
+  height: auto;
+  margin-bottom: 1rem;
+  filter: drop-shadow(0 18px 28px rgba(0, 0, 0, 0.25));
+}
+
+.siragugal-header h1 {
+  font-size: clamp(2.3rem, 4vw, 3rem);
+  margin: 0;
+}
+
+.siragugal-header p {
+  font-size: 1.05rem;
+  color: rgba(255, 255, 255, 0.92);
+  margin-top: 0.75rem;
+  max-width: 720px;
+}
+
+.siragugal-about,
+.siragugal-container {
+  padding: 4rem 1.5rem;
+  max-width: 1150px;
+  margin: 0 auto;
+}
+
+.siragugal-about h2,
+.siragugal-services h2,
+.siragugal-contact h2 {
+  font-size: clamp(2.2rem, 3.6vw, 2.8rem);
+  margin-bottom: 1rem;
+}
+
+.siragugal-about h4 {
+  font-size: 1rem;
+  color: var(--text-muted);
+  margin-bottom: 1.25rem;
+}
+
+.siragugal-about p,
+.siragugal-contact p,
+.siragugal-services li {
+  color: var(--text-muted);
+  line-height: 1.8;
+}
+
+.siragugal-about p {
+  max-width: 840px;
+  margin: 0 auto;
+}
+
+.siragugal-services ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.siragugal-services li {
+  position: relative;
+  padding-left: 1.8rem;
+  margin-bottom: 0.85rem;
+}
+
+.siragugal-services li::before {
+  content: "✓";
+  position: absolute;
+  left: 0;
+  top: 0;
+  color: var(--primary);
+  font-weight: 700;
+}
+
+.siragugal-container {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1.5rem;
+}
+
+.siragugal-section {
+  background: var(--surface);
+  border-radius: var(--radius);
+  padding: 2rem;
+  box-shadow: var(--shadow);
+  border: 1px solid rgba(140, 29, 52, 0.08);
+}
+
+.siragugal-contact button,
+.siragugal-about .read-more-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.95rem 1.8rem;
+  border-radius: 999px;
+  background: linear-gradient(135deg, var(--primary), var(--primary-soft));
+  color: #fff;
+}
+
+.siragugal-contact button:hover,
+.siragugal-about .read-more-btn:hover {
+  filter: brightness(1.05);
+}
+
+@media (max-width: 860px) {
+  .siragugal-container {
+    grid-template-columns: 1fr;
+  }
+
+  .siragugal-about,
+  .siragugal-container {
+    padding: 2.5rem 1rem;
+  }
+}

@@ -1,0 +1,108 @@
+.custproduct-container {
+  min-height: 100vh;
+  padding: 4rem 1.5rem;
+  background: var(--bg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Open Sans', sans-serif;
+}
+
+.custproduct-card {
+  width: 100%;
+  max-width: 980px;
+  background: var(--surface);
+  border-radius: 32px;
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow);
+  padding: 3rem;
+  display: grid;
+  gap: 2rem;
+}
+
+.custproduct-hero {
+  display: grid;
+  grid-template-columns: minmax(280px, 1fr) minmax(320px, 1fr);
+  gap: 2rem;
+  align-items: center;
+}
+
+.custproduct-hero h1 {
+  margin: 0;
+  font-size: clamp(2.8rem, 3.5vw, 3.8rem);
+  color: var(--text);
+  line-height: 1.05;
+}
+
+.custproduct-hero p {
+  margin: 1.5rem 0 0;
+  color: var(--text-muted);
+  font-size: 1.05rem;
+  line-height: 1.8;
+  max-width: 620px;
+}
+
+.custproduct-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  align-items: center;
+}
+
+.start-customization-btn {
+  min-width: 220px;
+  padding: 1rem 1.75rem;
+  font-size: 1rem;
+  background: linear-gradient(135deg, var(--primary), var(--primary-soft));
+  color: #fff;
+  border: none;
+  border-radius: 999px;
+  box-shadow: 0 18px 30px rgba(140, 29, 52, 0.18);
+}
+
+.start-customization-btn:hover {
+  filter: brightness(1.05);
+}
+
+.custproduct-highlights {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1.25rem;
+}
+
+.highlight-card {
+  background: var(--surface-soft);
+  border-radius: 26px;
+  border: 1px solid rgba(140, 29, 52, 0.08);
+  padding: 1.5rem;
+  color: var(--text);
+}
+
+.highlight-card h2 {
+  margin: 0 0 0.75rem;
+  font-size: 1.1rem;
+}
+
+.highlight-card p {
+  margin: 0;
+  color: var(--text-muted);
+  font-size: 0.98rem;
+  line-height: 1.75;
+}
+
+@media (max-width: 900px) {
+  .custproduct-hero {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 520px) {
+  .custproduct-card {
+    padding: 2rem;
+  }
+
+  .custproduct-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}

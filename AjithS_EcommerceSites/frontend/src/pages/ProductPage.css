@@ -1,0 +1,130 @@
+.product-page {
+  min-height: 100vh;
+  background-color: #f5f5f5;
+}
+
+.products-header {
+  text-align: center;
+  padding: 3rem 1.5rem;
+  background: linear-gradient(to right, #0066ff, #1a77d4);
+  color: white;
+}
+
+.products-header h1 {
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin-bottom: 0.75rem;
+}
+
+.products-header p {
+  font-size: 1rem;
+  font-weight: 400;
+  max-width: 600px;
+  margin: 0 auto;
+  opacity: 0.95;
+}
+
+.collections-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 1rem;
+  padding: 2rem 1.5rem;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.collection-card {
+  background: white;
+  border-radius: 0;
+  padding: 1.5rem 1rem;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+  border: 1px solid #e0e0e0;
+}
+
+.collection-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  border-color: #0066ff;
+}
+
+.collection-icon {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+}
+
+.collection-card h3 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #212121;
+  margin-bottom: 0.5rem;
+}
+
+.collection-card p {
+  font-size: 0.85rem;
+  color: #878787;
+  margin-bottom: 1rem;
+  line-height: 1.4;
+}
+
+.view-btn {
+  background-color: #0066ff;
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 2px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.view-btn:hover {
+  background-color: #1a77d4;
+  transform: scale(1.03);
+}
+
+@media (max-width: 768px) {
+  .collections-grid {
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 0.75rem;
+    padding: 1.5rem 1rem;
+  }
+
+  .products-header h1 {
+    font-size: 1.75rem;
+  }
+
+  .products-header p {
+    font-size: 0.9rem;
+  }
+
+  .collection-card {
+    padding: 1rem 0.75rem;
+  }
+
+  .collection-icon {
+    font-size: 2rem;
+  }
+
+  .collection-card h3 {
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 560px) {
+  .collections-grid {
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    padding: 1rem 0.75rem;
+  }
+
+  .products-header {
+    padding: 1.5rem 1rem;
+  }
+
+  .products-header h1 {
+    font-size: 1.5rem;
+  }
+}

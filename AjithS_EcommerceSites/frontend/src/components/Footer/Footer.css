@@ -1,0 +1,166 @@
+.footer {
+  background: linear-gradient(135deg, #172238, #0f1922);
+  color: #b0b0b0;
+  padding: 2.5rem 1.5rem;
+  border-radius: 0;
+  box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.footer-content {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 32px;
+}
+
+.footer-section,.footer-section-help {
+  flex: 1;
+  min-width: 250px;
+}
+
+.footer-section h3,.footer-section-help h3 {
+  color: #ffffff;
+  margin-bottom: 1rem;
+  font-size: 1.1rem;
+  font-weight: 700;
+}
+
+.footer-section ul,.footer-section-help ul {
+  list-style: none;
+  padding: 0;
+}
+
+.footer-section li,.footer-section-help li {
+  margin-bottom: 8px;
+}
+
+.footer-section a,.footer-section-help a {
+  color: #b0b0b0;
+  text-decoration: none;
+  transition: color 0.2s ease;
+  font-size: 0.9rem;
+}
+
+.footer-section a:hover,.footer-section-help a:hover {
+  color: #0066ff;
+}
+
+/* Contact Us Section */
+.contact-section p {
+  margin: 5px 0;
+  font-size: 1.1rem;
+}
+
+.divider {
+  border: 0;
+  border-top: 1px solid rgba(176, 176, 176, 0.2);
+  margin: 1rem 0;
+}
+
+.contact-icons {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+}
+
+.contact-icons a {
+  color: #b0b0b0;
+  font-size: 1.5rem;
+  transition: color 0.2s ease;
+}
+
+.contact-icons a:hover {
+  color: #0066ff;
+}
+
+/* Social Links */
+.social-links {
+  display: flex;
+  gap: 15px;
+}
+
+.social-links a {
+  font-size: 1.5rem;
+  color: #b0b0b0;
+  transition: color 0.2s ease;
+}
+
+.social-links a:hover {
+  color: #0066ff;
+}
+
+/* Footer Bottom */
+.footer-bottom {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-top: 30px;
+  gap: 16px;
+}
+
+.footer-bottom-left,
+.footer-bottom-right {
+  flex: 0 1 100%;
+  min-width: 0;
+  text-align: center;
+}
+
+.footer-bottom-right {
+  margin-right: 0;
+}
+
+.footer-bottom-right p {
+  margin: 0;
+  font-size: 0.95rem;
+  font-family: 'Arial', sans-serif;
+  color: #f1d8cf;
+  font-style: italic;
+  transition: color 0.3s ease;
+}
+
+.footer-bottom-right p:hover {
+  color: #fff; /* Hover effect for interactivity */
+}
+
+.superadmin-link {
+  color: #b0b0b0;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 0.9rem;
+  font-family: 'Arial', sans-serif;
+  letter-spacing: 0.3px;
+  padding: 0.5rem 1rem;
+  border: 1px solid #b0b0b0;
+  border-radius: 2px;
+  background-color: transparent;
+  transition: all 0.2s ease;
+}
+
+.superadmin-link:hover {
+  background-color: #0066ff;
+  color: #ffffff;
+  transform: scale(1.03);
+  cursor: pointer;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .footer-content {
+    flex-direction: column;
+  }
+
+  .footer-bottom {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .footer-bottom-right {
+    text-align: center;
+    margin-right: 0; /* Remove the margin-right on smaller screens */
+    margin-top: 10px;
+  }
+
+  .footer-country {
+    margin-top: 10px;
+  }
+}

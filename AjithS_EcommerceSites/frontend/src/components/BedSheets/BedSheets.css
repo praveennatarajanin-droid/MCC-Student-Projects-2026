@@ -1,0 +1,167 @@
+.bedsheet-customizer.customizer-container {
+  display: grid;
+  grid-template-columns: 260px minmax(0, 1fr) 260px;
+  gap: 20px;
+  min-height: calc(100vh - 160px);
+  max-width: 1400px;
+  margin: 24px auto;
+  padding: 20px;
+  background: #ffffff;
+  border-radius: 24px;
+  border: 1px solid #ececec;
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.08);
+}
+
+.bedsheet-customizer .sidebar,
+.bedsheet-customizer .saved-sidebar {
+  width: 260px;
+  min-width: 260px;
+  max-width: 260px;
+  position: sticky;
+  top: 120px;
+}
+
+.bedsheet-customizer .canvas-area {
+  width: 100%;
+  max-width: 776px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 18px;
+  padding: 18px;
+  background: #ffffff;
+  border-radius: 24px;
+  border: 1px solid #e8e8e8;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.05);
+  overflow: hidden;
+}
+
+.bedsheet-customizer .canvas-stage-wrapper {
+  width: 100%;
+  max-width: 740px;
+  min-height: 620px;
+  height: auto;
+  aspect-ratio: 740 / 620;
+  border-radius: 18px;
+  overflow: hidden;
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.08);
+}
+
+.bedsheet-customizer .canvas-stage {
+  width: 100% !important;
+  height: auto !important;
+  border-radius: 18px;
+}
+
+.bedsheet-customizer .canvas-area canvas {
+  width: 100% !important;
+  height: auto !important;
+}
+
+.bedsheet-customizer .save-btn,
+.bedsheet-customizer .sidebar .new-btn,
+.bedsheet-customizer .saved-sidebar .edit-btn {
+  width: 100%;
+}
+
+.bedsheet-customizer .sidebar-title {
+  margin-top: 18px;
+  margin-bottom: 12px;
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.bedsheet-customizer .designs-container,
+.bedsheet-customizer .saved-designs-container {
+  width: 100%;
+  max-height: 320px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  padding: 12px;
+  border-radius: 14px;
+  background: #fff;
+}
+
+.bedsheet-customizer .design-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+  gap: 10px;
+}
+
+.bedsheet-customizer .design-item {
+  width: 100%;
+  height: 80px;
+  object-fit: contain;
+  border: 1px solid #ddd;
+  border-radius: 14px;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  padding: 8px;
+  background: #fff;
+}
+
+.bedsheet-customizer .design-item:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.12);
+}
+
+.bedsheet-customizer .saved-design-card {
+  position: relative;
+  border-radius: 14px;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.bedsheet-customizer .saved-design-card.selected {
+  outline: 2px solid #007bff;
+}
+
+.bedsheet-customizer .saved-design-card img {
+  width: 100%;
+  height: 80px;
+  object-fit: contain;
+  display: block;
+}
+
+.bedsheet-customizer .delete-saved-btn {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background: rgba(255, 255, 255, 0.95);
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  padding: 4px 8px;
+  font-size: 0.75rem;
+  cursor: pointer;
+  color: #333;
+}
+
+.bedsheet-customizer .delete-saved-btn:hover {
+  background: #ffe5e5;
+  border-color: #ffb3b3;
+  color: #b22222;
+}
+
+@media (max-width: 1180px) {
+  .bedsheet-customizer {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .bedsheet-customizer .sidebar,
+  .bedsheet-customizer .saved-sidebar,
+  .bedsheet-customizer .canvas-area {
+    width: 100%;
+    min-width: auto;
+    max-width: 100%;
+    position: relative;
+    top: auto;
+  }
+}
+
+@media (max-width: 780px) {
+  .bedsheet-customizer {
+    padding: 16px;
+  }
+}
