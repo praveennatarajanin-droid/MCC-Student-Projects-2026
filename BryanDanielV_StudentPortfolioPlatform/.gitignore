@@ -1,0 +1,32 @@
+# .NET build outputs
+backend/**/bin/
+backend/**/obj/
+
+# Frontend build outputs
+frontend/.next/
+frontend/node_modules/
+frontend/out/
+
+# Environment files
+*.env
+*.env.local
+*.env.*.local
+
+# Editor/IDE
+.vscode/
+.idea/
+*.suo
+*.user
+*.userprefs
+
+# OS
+.DS_Store
+Thumbs.db
+
+# SQLite databases (keep the schema, not the data)
+# backend/**/*.db
+# backend/**/*.db-shm
+# backend/**/*.db-wal
+
+# Logs
+*.log

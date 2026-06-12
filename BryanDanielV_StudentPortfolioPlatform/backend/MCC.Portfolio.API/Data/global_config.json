@@ -1,0 +1,11 @@
+{
+  "institutionName": "Madras Christian College",
+  "establishedYear": "1837",
+  "academicYear": "2025/2026",
+  "vision": "To provide education of the highest quality to all, especially the underprivileged.",
+  "mission": "To nurture excellence, academic competence and social responsibility.",
+  "primaryColor": "#722F37",
+  "secondaryColor": "#D4AF37",
+  "defaultTheme": "academic",
+  "enabledThemes": ["academic", "corporate", "futuristic", "startup", "creative"]
+}

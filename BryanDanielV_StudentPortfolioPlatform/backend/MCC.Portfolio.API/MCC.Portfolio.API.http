@@ -1,0 +1,6 @@
+@MCC.Portfolio.API_HostAddress = http://localhost:5019
+
+GET {{MCC.Portfolio.API_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

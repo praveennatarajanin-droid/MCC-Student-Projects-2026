@@ -1,0 +1,1156 @@
+﻿diff --git a/frontend/src/app/portfolio/[slug]/page.tsx b/frontend/src/app/portfolio/[slug]/page.tsx
+index 9475884..459abe6 100644
+--- a/frontend/src/app/portfolio/[slug]/page.tsx
++++ b/frontend/src/app/portfolio/[slug]/page.tsx
+@@ -174,6 +174,670 @@ export default function PublicPortfolioPage() {
+ 
+   const currentStyle = themeStyles[theme] || themeStyles.academic;
+ 
++  const renderProfileCard = () => {
++    return (
++      <div className={`p-6 rounded-xl border ${getCardClass(currentStyle.card)} flex flex-col items-center text-center gap-4`}>
++        <div
++          className="w-28 h-28 rounded-full border-2 overflow-hidden bg-slate-900"
++          style={{ borderColor: layoutSettings.accentColor || undefined }}
++        >
++          {student.avatarUrl ? (
++            <img src={student.avatarUrl} alt="Avatar" className="w-full h-full object-cover" />
++          ) : (
++            <div className="w-full h-full flex items-center justify-center font-bold text-2xl text-mcc-gold bg-mcc-maroon">
++              {student.firstName?.[0]}{student.lastName?.[0]}
++            </div>
++          )}
++        </div>
++        <div>
++          <h2 className="text-xl font-bold">{student.firstName} {student.lastName}</h2>
++          <span className="text-xs opacity-60 block mt-1">{student.department}</span>
++          <span className="text-xs opacity-50 block">{student.batchYear}</span>
++        </div>
++        
++        <p className="text-xs leading-relaxed opacity-85 my-2 border-t border-b border-slate-800/20 py-3 w-full">
++          {student.bio || "Student of Madras Christian College."}
++        </p>
++
++        <div className="flex flex-wrap justify-center gap-x-4 gap-y-2 text-xs font-medium">
++          {student.githubUsername && (
++            <a href={`https://github.com/${student.githubUsername}`} target="_blank" rel="noreferrer" className="hover:underline flex items-center gap-1">
++              GitHub
++            </a>
++          )}
++          {student.behanceUsername && (
++            <a href={`https://behance.net/${student.behanceUsername}`} target="_blank" rel="noreferrer" className="hover:underline flex items-center gap-1">
++              Behance
++            </a>
++          )}
++          {layoutSettings.linkedinUrl && (
++            <a href={layoutSettings.linkedinUrl} target="_blank" rel="noreferrer" className="hover:underline flex items-center gap-1" style={{ color: layoutSettings.accentColor || undefined }}>
++              LinkedIn
++            </a>
++          )}
++          {layoutSettings.leetcodeUrl && (
++            <a href={layoutSettings.leetcodeUrl} target="_blank" rel="noreferrer" className="hover:underline flex items-center gap-1" style={{ color: layoutSettings.accentColor || undefined }}>
++              LeetCode
++            </a>
++          )}
++          {layoutSettings.blogUrl && (
++            <a href={layoutSettings.blogUrl} target="_blank" rel="noreferrer" className="hover:underline flex items-center gap-1" style={{ color: layoutSettings.accentColor || undefined }}>
++              Blog
++            </a>
++          )}
++        </div>
++
++        {/* Export Resume Button */}
++        <button
++          onClick={() => window.print()}
++          className="w-full mt-2 py-2 px-4 bg-mcc-maroon hover:bg-mcc-maroon-light text-slate-100 font-bold rounded-lg text-xs transition-all border border-mcc-gold/30 flex items-center justify-center gap-1.5 shadow"
++        >
++          <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
++            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
++          </svg>
++          Export Resume (PDF / Print)
++        </button>
++
++        {/* QR Verification Badge Button */}
++        <button
++          onClick={() => setQrModalOpen(true)}
++          className="w-full mt-2 py-2 px-4 bg-slate-900 hover:bg-slate-800 hover:border-mcc-gold/30 text-slate-200 font-bold rounded-lg text-xs transition-all border border-slate-800 flex items-center justify-center gap-1.5 shadow"
++        >
++          <span>≡ƒöì</span>
++          Verify Profile via QR Code
++        </button>
++      </div>
++    );
++  };
++
++  const renderObjectiveCard = () => {
++    if (!data.statementOfPurpose) return null;
++    return (
++      <div className={`p-6 rounded-xl border ${getCardClass(currentStyle.card)} flex flex-col gap-3`}>
++        <h3 className="font-bold text-xs uppercase tracking-wider opacity-60">Objective Statement</h3>
++        <p className="text-xs leading-relaxed italic opacity-85">
++          "{data.statementOfPurpose}"
++        </p>
++      </div>
++    );
++  };
++
++  const renderRecruiterCard = () => {
++    return (
++      <div className={`p-6 rounded-xl border ${getCardClass(currentStyle.card)} flex flex-col gap-4 no-print`}>
++        <h3 className="font-bold text-xs uppercase tracking-wider opacity-60">Recruiter Connection</h3>
++        <p className="text-[11px] opacity-80 leading-relaxed">
++          Interested in hiring? Leave your details below, and it will be sent directly to this student's placement dashboard.
++        </p>
++        {connectSuccess ? (
++          <div className="p-3.5 rounded bg-green-950/20 border border-green-800 text-[11px] text-green-400">
++            Γ£ô {connectSuccess}
++          </div>
++        ) : (
++          <form onSubmit={handleConnect} className="flex flex-col gap-3">
++            {connectError && (
++              <span className="text-[10px] text-red-500 font-medium">{connectError}</span>
++            )}
++            <div>
++              <label className="block text-[9px] font-bold uppercase opacity-65 mb-1">Company Name</label>
++              <input
++                type="text"
++                required
++                placeholder="e.g. Zoho Corp"
++                value={companyName}
++                onChange={(e) => setCompanyName(e.target.value)}
++                className="w-full h-8 px-3 rounded bg-black/10 border border-slate-700/40 text-[11px] focus:outline-none focus:border-mcc-gold"
++              />
++            </div>
++            <div>
++              <label className="block text-[9px] font-bold uppercase opacity-65 mb-1">Your Name</label>
++              <input
++                type="text"
++                required
++                placeholder="e.g. John Doe"
++                value={recruiterName}
++                onChange={(e) => setRecruiterName(e.target.value)}
++                className="w-full h-8 px-3 rounded bg-black/10 border border-slate-700/40 text-[11px] focus:outline-none focus:border-mcc-gold"
++              />
++            </div>
++            <div>
++              <label className="block text-[9px] font-bold uppercase opacity-65 mb-1">Email Address</label>
++              <input
++                type="email"
++                required
++                placeholder="e.g. john@zoho.com"
++                value={recruiterEmail}
++                onChange={(e) => setRecruiterEmail(e.target.value)}
++                className="w-full h-8 px-3 rounded bg-black/10 border border-slate-700/40 text-[11px] focus:outline-none focus:border-mcc-gold"
++              />
++            </div>
++            <div>
++              <label className="block text-[9px] font-bold uppercase opacity-65 mb-1">Inquiry / Message</label>
++              <textarea
++                rows={3}
++                required
++                placeholder="We are interested in scheduling an interview..."
++                value={message}
++                onChange={(e) => setMessage(e.target.value)}
++                className="w-full p-2 rounded bg-black/10 border border-slate-700/40 text-[11px] focus:outline-none focus:border-mcc-gold resize-none"
++              />
++            </div>
++            <button
++              type="submit"
++              disabled={connecting}
++              className="w-full h-8 bg-slate-900 border border-slate-800 hover:bg-slate-800 disabled:opacity-50 text-[11px] font-bold text-mcc-gold rounded transition-all"
++            >
++              {connecting ? "Sending Connection..." : "Submit Inquiry"}
++            </button>
++          </form>
++        )}
++      </div>
++    );
++  };
++
++  const renderCorporateHeaderBanner = () => {
++    return (
++      <div className={`col-span-12 p-8 rounded-xl border ${getCardClass(currentStyle.card)} flex flex-col md:flex-row items-center md:items-start gap-8 mb-4`}>
++        <div
++          className="w-32 h-32 rounded-full border-4 overflow-hidden bg-slate-900 shadow-md shrink-0"
++          style={{ borderColor: layoutSettings.accentColor || "#1d4ed8" }}
++        >
++          {student.avatarUrl ? (
++            <img src={student.avatarUrl} alt="Avatar" className="w-full h-full object-cover" />
++          ) : (
++            <div className="w-full h-full flex items-center justify-center font-bold text-3xl text-mcc-gold bg-mcc-maroon">
++              {student.firstName?.[0]}{student.lastName?.[0]}
++            </div>
++          )}
++        </div>
++        <div className="flex-1 text-center md:text-left flex flex-col gap-2">
++          <div className="flex flex-col md:flex-row items-center md:items-baseline justify-between gap-2">
++            <div>
++              <h2 className="text-3xl font-extrabold tracking-tight text-slate-905">{student.firstName} {student.lastName}</h2>
++              <span className="text-xs uppercase font-bold tracking-widest text-blue-700 block mt-1">
++                {student.department} &bull; Madras Christian College
++              </span>
++            </div>
++            <div className="flex gap-2">
++              <span className="text-[10px] font-bold uppercase bg-slate-100 text-slate-700 px-3 py-1 rounded-full border border-slate-200">
++                Batch {student.batchYear}
++              </span>
++              <span className="text-[10px] font-bold uppercase bg-green-50 text-green-700 border border-green-200 px-3 py-1 rounded-full flex items-center gap-1">
++                <span className="w-1.5 h-1.5 rounded-full bg-green-500" />
++                Verified Profile
++              </span>
++            </div>
++          </div>
++          
++          <p className="text-sm leading-relaxed opacity-85 mt-2 border-t border-slate-200/80 pt-3">
++            {student.bio || "Student of Madras Christian College."}
++          </p>
++
++          <div className="flex flex-wrap justify-center md:justify-start gap-x-6 gap-y-2 mt-4 text-xs font-semibold">
++            {student.githubUsername && (
++              <a href={`https://github.com/${student.githubUsername}`} target="_blank" rel="noreferrer" className="hover:underline flex items-center gap-1 text-slate-700 hover:text-black">
++                <span>≡ƒÆ╗</span> GitHub
++              </a>
++            )}
++            {student.behanceUsername && (
++              <a href={`https://behance.net/${student.behanceUsername}`} target="_blank" rel="noreferrer" className="hover:underline flex items-center gap-1 text-slate-700 hover:text-black">
++                <span>≡ƒÄ¿</span> Behance
++              </a>
++            )}
++            {layoutSettings.linkedinUrl && (
++              <a href={layoutSettings.linkedinUrl} target="_blank" rel="noreferrer" className="hover:underline flex items-center gap-1" style={{ color: layoutSettings.accentColor || "#1d4ed8" }}>
++                <span>≡ƒöù</span> LinkedIn
++              </a>
++            )}
++            {layoutSettings.leetcodeUrl && (
++              <a href={layoutSettings.leetcodeUrl} target="_blank" rel="noreferrer" className="hover:underline flex items-center gap-1" style={{ color: layoutSettings.accentColor || "#1d4ed8" }}>
++                <span>ΓÜí</span> LeetCode
++              </a>
++            )}
++            {layoutSettings.blogUrl && (
++              <a href={layoutSettings.blogUrl} target="_blank" rel="noreferrer" className="hover:underline flex items-center gap-1" style={{ color: layoutSettings.accentColor || "#1d4ed8" }}>
++                <span>Γ£ì∩╕Å</span> Blog
++              </a>
++            )}
++          </div>
++        </div>
++      </div>
++    );
++  };
++
++  const renderCorporateSidebar = () => {
++    return (
++      <div className="flex flex-col gap-6 sticky top-6">
++        {renderObjectiveCard()}
++        {renderRecruiterCard()}
++        <div className={`p-6 rounded-xl border ${getCardClass(currentStyle.card)} flex flex-col gap-3`}>
++          <h3 className="font-bold text-xs uppercase tracking-wider opacity-60">Verification Hub</h3>
++          <button
++            onClick={() => window.print()}
++            className="w-full py-2 px-4 bg-slate-900 hover:bg-slate-800 text-slate-100 font-bold rounded-lg text-xs transition-all border border-slate-700 flex items-center justify-center gap-1.5 shadow"
++          >
++            <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
++              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
++            </svg>
++            Export Resume (PDF)
++          </button>
++          <button
++            onClick={() => setQrModalOpen(true)}
++            className="w-full py-2 px-4 bg-blue-700 hover:bg-blue-800 text-white font-bold rounded-lg text-xs transition-all border border-blue-600 flex items-center justify-center gap-1.5 shadow"
++          >
++            <span>≡ƒöì</span> Verify via QR Code
++          </button>
++        </div>
++      </div>
++    );
++  };
++
++  const renderCreativeIntro = () => {
++    return (
++      <div className="col-span-12 py-10 px-4 md:px-8 flex flex-col md:flex-row items-center gap-10 border-b border-[#66fcf1]/20 mb-8">
++        <div className="relative shrink-0">
++          <div className="absolute -inset-1 rounded-2xl bg-gradient-to-r from-[#66fcf1] to-purple-600 opacity-60 blur-md animate-pulse" />
++          <div
++            className="relative w-36 h-36 rounded-2xl border-2 overflow-hidden bg-slate-900 transition-all duration-500 hover:rotate-2 hover:scale-105"
++            style={{ borderColor: "#66fcf1" }}
++          >
++            {student.avatarUrl ? (
++              <img src={student.avatarUrl} alt="Avatar" className="w-full h-full object-cover" />
++            ) : (
++              <div className="w-full h-full flex items-center justify-center font-extrabold text-4xl text-[#66fcf1] bg-[#1f2833]">
++                {student.firstName?.[0]}
++              </div>
++            )}
++          </div>
++        </div>
++        <div className="flex-1 text-center md:text-left flex flex-col gap-3">
++          <h2 className="text-4xl md:text-5xl font-black tracking-tight text-white uppercase select-none">
++            {student.firstName} <span className="text-[#66fcf1]">{student.lastName}</span>
++          </h2>
++          <span className="text-xs uppercase tracking-widest text-[#66fcf1] font-mono">
++            {student.department} &bull; Madras Christian College
++          </span>
++          <p className="text-sm leading-relaxed text-[#c5c6c7] max-w-2xl mt-1 italic">
++            "{student.bio || "Crafting digital experiences, shaping ideas into reality."}"
++          </p>
++          <div className="flex flex-wrap justify-center md:justify-start gap-3 mt-3 text-[11px] font-mono">
++            {student.githubUsername && (
++              <a href={`https://github.com/${student.githubUsername}`} target="_blank" rel="noreferrer" className="px-3 py-1 bg-[#1f2833] border border-[#66fcf1]/20 rounded-full hover:border-[#66fcf1] transition-all text-[#c5c6c7]">
++                github: {student.githubUsername}
++              </a>
++            )}
++            {student.behanceUsername && (
++              <a href={`https://behance.net/${student.behanceUsername}`} target="_blank" rel="noreferrer" className="px-3 py-1 bg-[#1f2833] border border-[#66fcf1]/20 rounded-full hover:border-[#66fcf1] transition-all text-[#c5c6c7]">
++                behance: {student.behanceUsername}
++              </a>
++            )}
++            {layoutSettings.linkedinUrl && (
++              <a href={layoutSettings.linkedinUrl} target="_blank" rel="noreferrer" className="px-3 py-1 bg-[#1f2833] border border-[#66fcf1]/20 rounded-full hover:border-[#66fcf1] transition-all text-[#66fcf1]">
++                linkedin
++              </a>
++            )}
++            {layoutSettings.leetcodeUrl && (
++              <a href={layoutSettings.leetcodeUrl} target="_blank" rel="noreferrer" className="px-3 py-1 bg-[#1f2833] border border-[#66fcf1]/20 rounded-full hover:border-[#66fcf1] transition-all text-[#66fcf1]">
++                leetcode
++              </a>
++            )}
++            {layoutSettings.blogUrl && (
++              <a href={layoutSettings.blogUrl} target="_blank" rel="noreferrer" className="px-3 py-1 bg-[#1f2833] border border-[#66fcf1]/20 rounded-full hover:border-[#66fcf1] transition-all text-[#66fcf1]">
++                blog
++              </a>
++            )}
++          </div>
++        </div>
++      </div>
++    );
++  };
++
++  const getCreativeColumns = () => {
++    const active = layoutSettings.visibleSections || [
++      "about",
++      "projects",
++      "publications",
++      "certifications",
++      "achievements",
++      "community"
++    ];
++    const leftSections = active.filter((key: string) => ["about", "projects", "community"].includes(key));
++    const rightSections = active.filter((key: string) => ["publications", "certifications", "achievements"].includes(key));
++    return { leftSections, rightSections };
++  };
++
++  const renderFuturisticHud = () => {
++    return (
++      <div className="col-span-12 p-4 rounded-lg border border-amber-400/20 bg-black/40 backdrop-blur-md flex flex-wrap justify-between items-center gap-4 text-[10px] font-mono tracking-widest text-slate-400 select-none mb-6">
++        <div className="flex items-center gap-2">
++          <span className="w-2 h-2 rounded-full bg-amber-400 animate-ping" />
++          <span className="text-amber-400 font-bold">SYSTEM ACTIVE</span>
++          <span className="opacity-30">|</span>
++          <span>PORTFOLIO_ID: <span className="text-white">{slug.toUpperCase()}</span></span>
++        </div>
++        <div className="flex items-center gap-4">
++          <span>PROJECTS_NODES: <span className="text-white">{projects.length}</span></span>
++          <span className="opacity-30">|</span>
++          <span>CERT_REGISTRY: <span className="text-white">{certifications.length}</span></span>
++          <span className="opacity-30">|</span>
++          <span className="text-green-400">STATUS: SECURE_STUB</span>
++        </div>
++      </div>
++    );
++  };
++
++  const renderFuturisticLeftPanel = () => {
++    return (
++      <div className="flex flex-col gap-6 sticky top-6">
++        {/* Profile module */}
++        <div className="p-6 rounded-xl border border-amber-400/25 bg-black/40 backdrop-blur-md flex flex-col items-center text-center gap-4 relative overflow-hidden">
++          <div className="absolute top-0 left-0 w-2 h-2 border-t-2 border-l-2 border-amber-400" />
++          <div className="absolute top-0 right-0 w-2 h-2 border-t-2 border-r-2 border-amber-400" />
++          <div className="absolute bottom-0 left-0 w-2 h-2 border-b-2 border-l-2 border-amber-400" />
++          <div className="absolute bottom-0 right-0 w-2 h-2 border-b-2 border-r-2 border-amber-400" />
++
++          {/* Glowing scanner avatar frame */}
++          <div className="relative">
++            <div className="absolute -inset-1.5 rounded-full border border-amber-400/40 animate-spin" style={{ animationDuration: "12s" }} />
++            <div className="w-28 h-28 rounded-full border-2 border-amber-400 overflow-hidden bg-slate-900 relative z-10">
++              {student.avatarUrl ? (
++                <img src={student.avatarUrl} alt="Avatar" className="w-full h-full object-cover" />
++              ) : (
++                <div className="w-full h-full flex items-center justify-center font-mono text-3xl text-amber-400 bg-slate-900">
++                  {student.firstName?.[0]}{student.lastName?.[0]}
++                </div>
++              )}
++            </div>
++          </div>
++
++          <div className="mt-2 font-mono">
++            <h2 className="text-xl font-bold tracking-wide uppercase text-white">{student.firstName} {student.lastName}</h2>
++            <span className="text-[10px] text-amber-400 uppercase font-bold block tracking-widest mt-1">
++              // {student.department}
++            </span>
++            <span className="text-[9px] text-slate-500 block uppercase tracking-wider mt-0.5">
++              MCC PORTFOLIO CORE // BATCH_{student.batchYear}
++            </span>
++          </div>
++          
++          <p className="text-[11px] font-mono leading-relaxed text-slate-300 border-t border-b border-amber-400/10 py-3 w-full text-justify">
++            {student.bio || "Student data stream active on MCC nodes."}
++          </p>
++
++          <div className="flex flex-wrap justify-center gap-x-4 gap-y-2 text-[10px] font-mono text-slate-400">
++            {student.githubUsername && (
++              <a href={`https://github.com/${student.githubUsername}`} target="_blank" rel="noreferrer" className="hover:text-amber-400 flex items-center gap-1 transition-colors">
++                [GITHUB]
++              </a>
++            )}
++            {student.behanceUsername && (
++              <a href={`https://behance.net/${student.behanceUsername}`} target="_blank" rel="noreferrer" className="hover:text-amber-400 flex items-center gap-1 transition-colors">
++                [BEHANCE]
++              </a>
++            )}
++            {layoutSettings.linkedinUrl && (
++              <a href={layoutSettings.linkedinUrl} target="_blank" rel="noreferrer" className="hover:text-amber-400 flex items-center gap-1 transition-colors">
++                [LINKEDIN]
++              </a>
++            )}
++            {layoutSettings.leetcodeUrl && (
++              <a href={layoutSettings.leetcodeUrl} target="_blank" rel="noreferrer" className="hover:text-amber-400 flex items-center gap-1 transition-colors">
++                [LEETCODE]
++              </a>
++            )}
++          </div>
++        </div>
++
++        {renderObjectiveCard()}
++        {renderRecruiterCard()}
++
++        {/* Action center */}
++        <div className="p-4 rounded-lg border border-amber-400/20 bg-black/40 backdrop-blur-md flex flex-col gap-2 font-mono text-[10px] no-print">
++          <span className="text-amber-400 uppercase tracking-wider font-bold">// SECURE HUB ACTIONS</span>
++          <button
++            onClick={() => window.print()}
++            className="w-full py-2 bg-slate-900 hover:bg-slate-800 text-slate-300 font-bold rounded border border-amber-400/20 hover:border-amber-400 transition-all flex items-center justify-center gap-1"
++          >
++            EXPORT_SYSTEM_DATA_DECK (PDF)
++          </button>
++          <button
++            onClick={() => setQrModalOpen(true)}
++            className="w-full py-2 bg-amber-400/10 hover:bg-amber-400/20 text-amber-400 font-bold rounded border border-amber-400/30 transition-all flex items-center justify-center gap-1"
++          >
++            REQUEST_QR_DECRYPT_KEY
++          </button>
++        </div>
++      </div>
++    );
++  };
++
++  const renderSection = (sectionKey: string) => {
++    switch (sectionKey) {
++      case "about":
++        return data.storyContent ? (
++          <section key="about" className="flex flex-col gap-4 animate-fade-in">
++            <h3 className={`pb-2 border-b ${currentStyle.sectionTitle} ${currentStyle.divider}`}>
++              {theme === "futuristic"
++                ? `[SYS_DECK: ${(data.storyTitle || "Personal Story").toUpperCase()}]`
++                : (data.storyTitle || "Personal Story")}
++            </h3>
++            <p className="text-xs leading-relaxed opacity-90 whitespace-pre-line">
++              {data.storyContent}
++            </p>
++          </section>
++        ) : null;
++      case "projects":
++        return (
++          <section key="projects" className="flex flex-col gap-4">
++            <h3 className={`pb-2 border-b ${currentStyle.sectionTitle} ${currentStyle.divider}`}>
++              {theme === "futuristic" ? "[CORE_NODE: TECHNICAL_PROJECTS]" : "Technical Projects"}
++            </h3>
++            <div className="grid sm:grid-cols-2 gap-4">
++              {projects.length === 0 ? (
++                <span className="text-xs opacity-50 italic">No project uploads logged.</span>
++              ) : (
++                projects.map((proj: any) => (
++                  <div key={proj.id} className={`p-4 rounded-lg border ${getCardClass(currentStyle.card)} project-card flex flex-col justify-between gap-3 relative overflow-hidden`}>
++                    {theme === "futuristic" && (
++                      <>
++                        <div className="absolute top-0 left-0 w-1.5 h-1.5 border-t border-l border-amber-400" />
++                        <div className="absolute top-0 right-0 w-1.5 h-1.5 border-t border-r border-amber-400" />
++                        <div className="absolute bottom-0 left-0 w-1.5 h-1.5 border-b border-l border-amber-400" />
++                        <div className="absolute bottom-0 right-0 w-1.5 h-1.5 border-b border-r border-amber-400" />
++                      </>
++                    )}
++                    <div>
++                      {proj.imageUrl && (
++                        <div className="h-32 w-full rounded-md overflow-hidden mb-3 border border-slate-800/10">
++                          <img src={proj.imageUrl} alt={proj.title} className="w-full h-full object-cover" />
++                        </div>
++                      )}
++                      <h4 className="font-bold text-sm">{proj.title}</h4>
++                      {proj.technologiesUsed && (
++                        <span className="text-[9px] font-mono text-amber-500 opacity-80 block mt-1">
++                          {theme === "futuristic" ? `// TECH: ` : ""}{proj.technologiesUsed}
++                        </span>
++                      )}
++                      <p className="text-[11px] opacity-75 mt-1.5 leading-relaxed line-clamp-3">{proj.description}</p>
++                    </div>
++
++                    <div className="flex justify-between items-center border-t border-slate-800/10 pt-3 mt-2">
++                      <div className="flex gap-2">
++                        {proj.githubUrl && (
++                          <a href={proj.githubUrl} target="_blank" rel="noreferrer" className="text-[10px] font-bold hover:underline">
++                            {theme === "futuristic" ? "[CODE]" : "Code"}
++                          </a>
++                        )}
++                        {proj.liveUrl && (
++                          <a
++                            href={proj.liveUrl}
++                            target="_blank"
++                            rel="noreferrer"
++                            className="text-[10px] font-bold hover:underline"
++                            style={{ color: layoutSettings.accentColor || undefined }}
++                          >
++                            {theme === "futuristic" ? "[LIVE_DEMO]" : "Live Demo"}
++                          </a>
++                        )}
++                      </div>
++                    </div>
++                  </div>
++                ))
++              )}
++            </div>
++          </section>
++        );
++      case "publications":
++        return (
++          <section key="publications" className="flex flex-col gap-4">
++            <h3 className={`pb-2 border-b ${currentStyle.sectionTitle} ${currentStyle.divider}`}>
++              {theme === "futuristic" ? "[ARCHIVE_NODE: RESEARCH_&_INNOVATION]" : "Research & Innovation"}
++            </h3>
++            <div className="flex flex-col gap-3">
++              {publications.length === 0 ? (
++                <span className="text-xs opacity-50 italic">No publications indexed.</span>
++              ) : (
++                publications.map((pub: any) => (
++                  <div key={pub.id} className={`p-4 rounded-lg border ${getCardClass(currentStyle.card)} flex flex-col gap-2 relative overflow-hidden`}>
++                    {theme === "futuristic" && (
++                      <>
++                        <div className="absolute top-0 right-0 text-[8px] font-mono text-amber-400 bg-amber-400/10 px-2 py-0.5 border-b border-l border-amber-400/20">
++                          PUB_VERIFIED
++                        </div>
++                        <div className="absolute top-0 left-0 w-1.5 h-1.5 border-t border-l border-amber-400" />
++                        <div className="absolute bottom-0 left-0 w-1.5 h-1.5 border-b border-l border-amber-400" />
++                      </>
++                    )}
++                    <div className="flex justify-between items-start gap-4">
++                      <div>
++                        <h4 className="font-bold text-sm">{pub.title}</h4>
++                        <span className="text-[10px] opacity-60 block mt-0.5">{pub.journalOrConference} &bull; {new Date(pub.publishDate).getFullYear()}</span>
++                      </div>
++                    </div>
++                    <p className="text-[11px] opacity-75 leading-relaxed bg-black/5 p-3 rounded border border-slate-800/5">
++                      <strong>Abstract Summary:</strong> {pub.abstract}
++                    </p>
++                    <span className="text-[10px] opacity-50 font-medium">Authors: {pub.authors}</span>
++                    {pub.paperUrl && (
++                      <a
++                        href={pub.paperUrl}
++                        target="_blank"
++                        rel="noreferrer"
++                        className="text-[10px] font-bold hover:underline mt-1 w-fit"
++                        style={{ color: layoutSettings.accentColor || undefined }}
++                      >
++                        {theme === "futuristic" ? "DECRYPT_PAPER_DATA &rarr;" : "Read Full Paper &rarr;"}
++                      </a>
++                    )}
++                  </div>
++                ))
++              )}
++            </div>
++          </section>
++        );
++      case "certifications":
++        return (
++          <section key="certifications" className="flex flex-col gap-4">
++            <h3 className={`pb-2 border-b ${currentStyle.sectionTitle} ${currentStyle.divider}`}>
++              {theme === "futuristic" ? "[REGISTRY: PROFESSIONAL_CERTIFICATIONS]" : "Professional Certifications"}
++            </h3>
++            <div className="flex flex-col gap-2.5">
++              {certifications.length === 0 ? (
++                <span className="text-xs opacity-50 italic">No certifications logged.</span>
++              ) : (
++                certifications.map((cert: any) => (
++                  <div key={cert.id} className={`p-3.5 rounded-lg border ${getCardClass(currentStyle.card)} flex items-center justify-between gap-4 relative overflow-hidden`}>
++                    {theme === "futuristic" && (
++                      <>
++                        <div className="absolute top-0 left-0 w-1.5 h-1.5 border-t border-l border-amber-400" />
++                        <div className="absolute bottom-0 right-0 w-1.5 h-1.5 border-b border-r border-amber-400" />
++                      </>
++                    )}
++                    <div className="flex items-center gap-3">
++                      <div
++                        className="w-8 h-8 rounded bg-slate-900 border flex items-center justify-center font-bold text-[10px]"
++                        style={{
++                          color: layoutSettings.accentColor || undefined,
++                          borderColor: layoutSettings.accentColor || undefined
++                        }}
++                      >
++                        {theme === "futuristic" ? "ID" : "C"}
++                      </div>
++                      <div>
++                        <h4 className="font-bold text-xs">{cert.name}</h4>
++                        <span className="text-[10px] opacity-60 block">{cert.issuingOrganization} &bull; Issued {new Date(cert.issueDate).toLocaleDateString()}</span>
++                      </div>
++                    </div>
++                    {cert.credentialUrl && (
++                      <a
++                        href={cert.credentialUrl}
++                        target="_blank"
++                        rel="noreferrer"
++                        className="text-[10px] font-bold hover:underline"
++                        style={{ color: layoutSettings.accentColor || undefined }}
++                      >
++                        {theme === "futuristic" ? "ACCESS_LEDGER" : "Verify Certification"}
++                      </a>
++                    )}
++                  </div>
++                ))
++              )}
++            </div>
++          </section>
++        );
++      case "achievements":
++        return (
++          <section key="achievements" className="flex flex-col gap-4">
++            <h3 className={`pb-2 border-b ${currentStyle.sectionTitle} ${currentStyle.divider}`}>
++              {theme === "futuristic" ? "[REGISTRY: AWARDS_&_CONTESTS]" : "Awards & Contests"}
++            </h3>
++            <div className="grid sm:grid-cols-2 gap-4">
++              {achievements.length === 0 ? (
++                <span className="text-xs opacity-50 italic">No achievements reported.</span>
++              ) : (
++                achievements.map((ach: any) => (
++                  <div key={ach.id} className={`p-4 rounded-lg border ${getCardClass(currentStyle.card)} flex flex-col gap-1.5 relative overflow-hidden`}>
++                    {theme === "futuristic" && (
++                      <>
++                        <div className="absolute top-0 left-0 w-1.5 h-1.5 border-t border-l border-amber-400" />
++                        <div className="absolute bottom-0 right-0 w-1.5 h-1.5 border-b border-r border-amber-400" />
++                      </>
++                    )}
++                    <h4 className="font-bold text-xs">{ach.title}</h4>
++                    <span className="text-[9px] opacity-50 font-bold uppercase">{ach.category} &bull; {new Date(ach.dateEarned).toLocaleDateString()}</span>
++                    <p className="text-[11px] opacity-75 leading-relaxed">{ach.description}</p>
++                  </div>
++                ))
++              )}
++            </div>
++          </section>
++        );
++      case "community":
++        return (
++          <section key="community" className="flex flex-col gap-4">
++            <h3 className={`pb-2 border-b ${currentStyle.sectionTitle} ${currentStyle.divider}`}>
++              {theme === "futuristic" ? "[OUTREACH: COMMUNITY_OUTREACH]" : "Community Outreach"}
++            </h3>
++            <div className="grid sm:grid-cols-2 gap-4">
++              {communityServices.length === 0 ? (
++                <span className="text-xs opacity-50 italic">No service records registered.</span>
++              ) : (
++                communityServices.map((service: any) => (
++                  <div key={service.id} className={`p-4 rounded-lg border ${getCardClass(currentStyle.card)} flex flex-col gap-1.5`}>
++                    <h4 className="font-bold text-xs">{service.organization}</h4>
++                    <span className="text-[9px] opacity-50 font-bold uppercase">{service.role}</span>
++                    <p className="text-[11px] opacity-75 leading-relaxed">{service.description}</p>
++                  </div>
++                ))
++              )}
++            </div>
++          </section>
++        );
++      default:
++        return null;
++    }
++  };
++
+   return (
+     <div
+       className={`min-h-screen ${currentStyle.bg} ${currentStyle.text} ${currentFontClass} theme-${theme} transition-colors duration-500 flex flex-col justify-between`}
+@@ -401,362 +1065,133 @@ export default function PublicPortfolioPage() {
+           </div>
+         </header>
+ 
+-        {/* Main Grid Content */}
+-        <main className="max-w-6xl mx-auto w-full px-6 py-12 md:py-16 flex-1 grid md:grid-cols-12 gap-8 items-start">
+-          {/* Profile Card & Info */}
+-          <div className="md:col-span-4 flex flex-col gap-6 sticky top-6">
+-            <div className={`p-6 rounded-xl border ${getCardClass(currentStyle.card)} flex flex-col items-center text-center gap-4`}>
+-              <div
+-                className="w-28 h-28 rounded-full border-2 overflow-hidden bg-slate-900"
+-                style={{ borderColor: layoutSettings.accentColor || undefined }}
+-              >
+-                {student.avatarUrl ? (
+-                  <img src={student.avatarUrl} alt="Avatar" className="w-full h-full object-cover" />
+-                ) : (
+-                  <div className="w-full h-full flex items-center justify-center font-bold text-2xl text-mcc-gold bg-mcc-maroon">
+-                    {student.firstName?.[0]}{student.lastName?.[0]}
+-                  </div>
+-                )}
+-              </div>
+-              <div>
+-                <h2 className="text-xl font-bold">{student.firstName} {student.lastName}</h2>
+-                <span className="text-xs opacity-60 block mt-1">{student.department}</span>
+-                <span className="text-xs opacity-50 block">{student.batchYear}</span>
+-              </div>
+-              
+-              <p className="text-xs leading-relaxed opacity-85 my-2 border-t border-b border-slate-800/20 py-3 w-full">
+-                {student.bio || "Student of Madras Christian College."}
+-              </p>
+-
+-              <div className="flex flex-wrap justify-center gap-x-4 gap-y-2 text-xs font-medium">
+-                {student.githubUsername && (
+-                  <a href={`https://github.com/${student.githubUsername}`} target="_blank" rel="noreferrer" className="hover:underline flex items-center gap-1">
+-                    GitHub
+-                  </a>
+-                )}
+-                {student.behanceUsername && (
+-                  <a href={`https://behance.net/${student.behanceUsername}`} target="_blank" rel="noreferrer" className="hover:underline flex items-center gap-1">
+-                    Behance
+-                  </a>
+-                )}
+-                {layoutSettings.linkedinUrl && (
+-                  <a href={layoutSettings.linkedinUrl} target="_blank" rel="noreferrer" className="hover:underline flex items-center gap-1" style={{ color: layoutSettings.accentColor || undefined }}>
+-                    LinkedIn
+-                  </a>
+-                )}
+-                {layoutSettings.leetcodeUrl && (
+-                  <a href={layoutSettings.leetcodeUrl} target="_blank" rel="noreferrer" className="hover:underline flex items-center gap-1" style={{ color: layoutSettings.accentColor || undefined }}>
+-                    LeetCode
+-                  </a>
+-                )}
+-                {layoutSettings.blogUrl && (
+-                  <a href={layoutSettings.blogUrl} target="_blank" rel="noreferrer" className="hover:underline flex items-center gap-1" style={{ color: layoutSettings.accentColor || undefined }}>
+-                    Blog
+-                  </a>
+-                )}
+-              </div>
++        {/* 1. Academic Theme Layout */}
++        {theme === "academic" && (
++          <main className="max-w-6xl mx-auto w-full px-6 py-12 md:py-16 flex-1 grid md:grid-cols-12 gap-8 items-start">
++            {/* Sidebar (Left) */}
++            <div className="col-span-12 md:col-span-4 flex flex-col gap-6 sticky top-6">
++              {renderProfileCard()}
++              {renderObjectiveCard()}
++              {renderRecruiterCard()}
++            </div>
++            {/* Content (Right) */}
++            <div className="col-span-12 md:col-span-8 flex flex-col gap-8">
++              {(layoutSettings.visibleSections || [
++                "about",
++                "projects",
++                "publications",
++                "certifications",
++                "achievements",
++                "community"
++              ]).map((sectionKey: string) => renderSection(sectionKey))}
++            </div>
++          </main>
++        )}
+ 
+-              {/* Export Resume Button */}
+-              <button
+-                onClick={() => window.print()}
+-                className="w-full mt-2 py-2 px-4 bg-mcc-maroon hover:bg-mcc-maroon-light text-slate-100 font-bold rounded-lg text-xs transition-all border border-mcc-gold/30 flex items-center justify-center gap-1.5 shadow"
+-              >
+-                <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
+-                </svg>
+-                Export Resume (PDF / Print)
+-              </button>
++        {/* 2. Corporate Theme Layout */}
++        {theme === "corporate" && (
++          <main className="max-w-6xl mx-auto w-full px-6 py-12 md:py-16 flex-1 grid grid-cols-12 gap-8 items-start">
++            {renderCorporateHeaderBanner()}
++            {/* Sidebar (Left) */}
++            <div className="col-span-12 md:col-span-4">
++              {renderCorporateSidebar()}
++            </div>
++            {/* Content (Right) */}
++            <div className="col-span-12 md:col-span-8 flex flex-col gap-8">
++              {(layoutSettings.visibleSections || [
++                "about",
++                "projects",
++                "publications",
++                "certifications",
++                "achievements",
++                "community"
++              ]).map((sectionKey: string) => renderSection(sectionKey))}
++            </div>
++          </main>
++        )}
+ 
+-              {/* QR Verification Badge Button */}
+-              <button
+-                onClick={() => setQrModalOpen(true)}
+-                className="w-full mt-2 py-2 px-4 bg-slate-900 hover:bg-slate-800 hover:border-mcc-gold/30 text-slate-200 font-bold rounded-lg text-xs transition-all border border-slate-800 flex items-center justify-center gap-1.5 shadow"
+-              >
+-                <span>≡ƒöì</span>
+-                Verify Profile via QR Code
+-              </button>
++        {/* 3. Startup Theme Layout */}
++        {theme === "startup" && (
++          <main className="max-w-6xl mx-auto w-full px-6 py-12 md:py-16 flex-1 grid md:grid-cols-12 gap-8 items-start animate-fade-in">
++            {/* Content (Left) */}
++            <div className="order-2 md:order-1 col-span-12 md:col-span-8 flex flex-col gap-8">
++              {(layoutSettings.visibleSections || [
++                "about",
++                "projects",
++                "publications",
++                "certifications",
++                "achievements",
++                "community"
++              ]).map((sectionKey: string) => renderSection(sectionKey))}
++            </div>
++            {/* Sidebar (Right) */}
++            <div className="order-1 md:order-2 col-span-12 md:col-span-4 flex flex-col gap-6 sticky top-6">
++              {renderProfileCard()}
++              {renderObjectiveCard()}
++              {renderRecruiterCard()}
+             </div>
++          </main>
++        )}
+ 
+-            {/* Statement of Purpose Card */}
+-            {data.statementOfPurpose && (
+-              <div className={`p-6 rounded-xl border ${getCardClass(currentStyle.card)} flex flex-col gap-3`}>
+-                <h3 className="font-bold text-xs uppercase tracking-wider opacity-60">Objective Statement</h3>
+-                <p className="text-xs leading-relaxed italic opacity-85">
+-                  "{data.statementOfPurpose}"
+-                </p>
+-              </div>
+-            )}
++        {/* 4. Creative Theme Layout */}
++        {theme === "creative" && (
++          <main className="max-w-6xl mx-auto w-full px-6 py-12 md:py-16 flex-1 grid grid-cols-12 gap-8 items-start animate-fade-in">
++            {renderCreativeIntro()}
++            
++            {/* Left Column */}
++            <div className="col-span-12 md:col-span-7 flex flex-col gap-8">
++              {getCreativeColumns().leftSections.map((sectionKey: string) => renderSection(sectionKey))}
++            </div>
+ 
+-            {/* Recruiter Connect Card */}
+-            <div className={`p-6 rounded-xl border ${getCardClass(currentStyle.card)} flex flex-col gap-4 no-print`}>
+-              <h3 className="font-bold text-xs uppercase tracking-wider opacity-60">Recruiter Connection</h3>
+-              <p className="text-[11px] opacity-80 leading-relaxed">
+-                Interested in hiring? Leave your details below, and it will be sent directly to this student's placement dashboard.
+-              </p>
+-              {connectSuccess ? (
+-                <div className="p-3.5 rounded bg-green-950/20 border border-green-800 text-[11px] text-green-400">
+-                  Γ£ô {connectSuccess}
+-                </div>
+-              ) : (
+-                <form onSubmit={handleConnect} className="flex flex-col gap-3">
+-                  {connectError && (
+-                    <span className="text-[10px] text-red-500 font-medium">{connectError}</span>
+-                  )}
+-                  <div>
+-                    <label className="block text-[9px] font-bold uppercase opacity-65 mb-1">Company Name</label>
+-                    <input
+-                      type="text"
+-                      required
+-                      placeholder="e.g. Zoho Corp"
+-                      value={companyName}
+-                      onChange={(e) => setCompanyName(e.target.value)}
+-                      className="w-full h-8 px-3 rounded bg-black/10 border border-slate-700/40 text-[11px] focus:outline-none focus:border-mcc-gold"
+-                    />
+-                  </div>
+-                  <div>
+-                    <label className="block text-[9px] font-bold uppercase opacity-65 mb-1">Your Name</label>
+-                    <input
+-                      type="text"
+-                      required
+-                      placeholder="e.g. John Doe"
+-                      value={recruiterName}
+-                      onChange={(e) => setRecruiterName(e.target.value)}
+-                      className="w-full h-8 px-3 rounded bg-black/10 border border-slate-700/40 text-[11px] focus:outline-none focus:border-mcc-gold"
+-                    />
+-                  </div>
+-                  <div>
+-                    <label className="block text-[9px] font-bold uppercase opacity-65 mb-1">Email Address</label>
+-                    <input
+-                      type="email"
+-                      required
+-                      placeholder="e.g. john@zoho.com"
+-                      value={recruiterEmail}
+-                      onChange={(e) => setRecruiterEmail(e.target.value)}
+-                      className="w-full h-8 px-3 rounded bg-black/10 border border-slate-700/40 text-[11px] focus:outline-none focus:border-mcc-gold"
+-                    />
+-                  </div>
+-                  <div>
+-                    <label className="block text-[9px] font-bold uppercase opacity-65 mb-1">Inquiry / Message</label>
+-                    <textarea
+-                      rows={3}
+-                      required
+-                      placeholder="We are interested in scheduling an interview..."
+-                      value={message}
+-                      onChange={(e) => setMessage(e.target.value)}
+-                      className="w-full p-2 rounded bg-black/10 border border-slate-700/40 text-[11px] focus:outline-none focus:border-mcc-gold resize-none"
+-                    />
+-                  </div>
++            {/* Right Column */}
++            <div className="col-span-12 md:col-span-5 flex flex-col gap-8">
++              {renderObjectiveCard()}
++              {getCreativeColumns().rightSections.map((sectionKey: string) => renderSection(sectionKey))}
++              {renderRecruiterCard()}
++              <div className={`p-6 rounded-xl border ${getCardClass(currentStyle.card)} flex flex-col gap-3 no-print`}>
++                <h3 className="font-mono text-xs uppercase tracking-wider text-[#66fcf1]">Verify Digital Credentials</h3>
++                <div className="flex gap-2">
+                   <button
+-                    type="submit"
+-                    disabled={connecting}
+-                    className="w-full h-8 bg-slate-900 border border-slate-800 hover:bg-slate-800 disabled:opacity-50 text-[11px] font-bold text-mcc-gold rounded transition-all"
++                    onClick={() => window.print()}
++                    className="flex-1 py-2 bg-slate-900 border border-[#66fcf1]/30 hover:border-[#66fcf1] text-[#c5c6c7] font-bold rounded-lg text-xs transition-all flex items-center justify-center gap-1 shadow"
+                   >
+-                    {connecting ? "Sending Connection..." : "Submit Inquiry"}
++                    PDF Print
+                   </button>
+-                </form>
+-              )}
++                  <button
++                    onClick={() => setQrModalOpen(true)}
++                    className="flex-1 py-2 bg-[#66fcf1]/10 border border-[#66fcf1]/30 hover:bg-[#66fcf1]/20 text-[#66fcf1] font-bold rounded-lg text-xs transition-all flex items-center justify-center gap-1 shadow"
++                  >
++                    QR Code
++                  </button>
++                </div>
++              </div>
+             </div>
+-          </div>          {/* Dynamic Detail Cards List */}
+-          <div className="md:col-span-8 flex flex-col gap-8">
+-            {(layoutSettings.visibleSections || [
+-              "about",
+-              "projects",
+-              "publications",
+-              "certifications",
+-              "achievements",
+-              "community"
+-            ]).map((sectionKey: string) => {
+-              switch (sectionKey) {
+-                case "about":
+-                  return data.storyContent ? (
+-                    <section key="about" className="flex flex-col gap-4">
+-                      <h3 className={`pb-2 border-b ${currentStyle.sectionTitle} ${currentStyle.divider}`}>
+-                        {data.storyTitle || "Personal Story"}
+-                      </h3>
+-                      <p className="text-xs leading-relaxed opacity-90 whitespace-pre-line">
+-                        {data.storyContent}
+-                      </p>
+-                    </section>
+-                  ) : null;
+-                case "projects":
+-                  return (
+-                    <section key="projects" className="flex flex-col gap-4">
+-                      <h3 className={`pb-2 border-b ${currentStyle.sectionTitle} ${currentStyle.divider}`}>
+-                        Technical Projects
+-                      </h3>
+-                      <div className="grid sm:grid-cols-2 gap-4">
+-                        {projects.length === 0 ? (
+-                          <span className="text-xs opacity-50 italic">No project uploads logged.</span>
+-                        ) : (
+-                          projects.map((proj: any) => (
+-                            <div key={proj.id} className={`p-4 rounded-lg border ${getCardClass(currentStyle.card)} project-card flex flex-col justify-between gap-3`}>
+-                              <div>
+-                                {proj.imageUrl && (
+-                                  <div className="h-32 w-full rounded-md overflow-hidden mb-3 border border-slate-800/10">
+-                                    <img src={proj.imageUrl} alt={proj.title} className="w-full h-full object-cover" />
+-                                  </div>
+-                                )}
+-                                <h4 className="font-bold text-sm">{proj.title}</h4>
+-                                <p className="text-[11px] opacity-75 mt-1.5 leading-relaxed line-clamp-3">{proj.description}</p>
+-                              </div>
+-
+-                              <div className="flex justify-between items-center border-t border-slate-800/10 pt-3 mt-2">
+-                                <div className="flex gap-2">
+-                                  {proj.githubUrl && (
+-                                    <a href={proj.githubUrl} target="_blank" rel="noreferrer" className="text-[10px] font-bold hover:underline">
+-                                      Code
+-                                    </a>
+-                                  )}
+-                                  {proj.liveUrl && (
+-                                    <a
+-                                      href={proj.liveUrl}
+-                                      target="_blank"
+-                                      rel="noreferrer"
+-                                      className="text-[10px] font-bold hover:underline"
+-                                      style={{ color: layoutSettings.accentColor || undefined }}
+-                                    >
+-                                      Live Demo
+-                                    </a>
+-                                  )}
+-                                </div>
+-                              </div>
+-                            </div>
+-                          ))
+-                        )}
+-                      </div>
+-                    </section>
+-                  );
+-                case "publications":
+-                  return (
+-                    <section key="publications" className="flex flex-col gap-4">
+-                      <h3 className={`pb-2 border-b ${currentStyle.sectionTitle} ${currentStyle.divider}`}>
+-                        Research & Innovation
+-                      </h3>
+-                      <div className="flex flex-col gap-3">
+-                        {publications.length === 0 ? (
+-                          <span className="text-xs opacity-50 italic">No publications indexed.</span>
+-                        ) : (
+-                          publications.map((pub: any) => (
+-                            <div key={pub.id} className={`p-4 rounded-lg border ${getCardClass(currentStyle.card)} flex flex-col gap-2`}>
+-                              <div className="flex justify-between items-start gap-4">
+-                                <div>
+-                                  <h4 className="font-bold text-sm">{pub.title}</h4>
+-                                  <span className="text-[10px] opacity-60 block mt-0.5">{pub.journalOrConference} &bull; {new Date(pub.publishDate).getFullYear()}</span>
+-                                </div>
+-                              </div>
+-                              <p className="text-[11px] opacity-75 leading-relaxed bg-black/5 p-3 rounded border border-slate-800/5">
+-                                <strong>Abstract Summary:</strong> {pub.abstract}
+-                              </p>
+-                              <span className="text-[10px] opacity-50">Authors: {pub.authors}</span>
+-                              {pub.paperUrl && (
+-                                <a
+-                                  href={pub.paperUrl}
+-                                  target="_blank"
+-                                  rel="noreferrer"
+-                                  className="text-[10px] font-bold hover:underline mt-1 w-fit"
+-                                  style={{ color: layoutSettings.accentColor || undefined }}
+-                                >
+-                                  Read Full Paper &rarr;
+-                                </a>
+-                              )}
+-                            </div>
+-                          ))
+-                        )}
+-                      </div>
+-                    </section>
+-                  );
+-                case "certifications":
+-                  return (
+-                    <section key="certifications" className="flex flex-col gap-4">
+-                      <h3 className={`pb-2 border-b ${currentStyle.sectionTitle} ${currentStyle.divider}`}>
+-                        Professional Certifications
+-                      </h3>
+-                      <div className="flex flex-col gap-2.5">
+-                        {certifications.length === 0 ? (
+-                          <span className="text-xs opacity-50 italic">No certifications logged.</span>
+-                        ) : (
+-                          certifications.map((cert: any) => (
+-                            <div key={cert.id} className={`p-3.5 rounded-lg border ${getCardClass(currentStyle.card)} flex items-center justify-between gap-4`}>
+-                              <div className="flex items-center gap-3">
+-                                <div
+-                                  className="w-8 h-8 rounded bg-slate-900 border flex items-center justify-center font-bold text-[10px]"
+-                                  style={{
+-                                    color: layoutSettings.accentColor || undefined,
+-                                    borderColor: layoutSettings.accentColor || undefined
+-                                  }}
+-                                >
+-                                  C
+-                                </div>
+-                                <div>
+-                                  <h4 className="font-bold text-xs">{cert.name}</h4>
+-                                  <span className="text-[10px] opacity-60 block">{cert.issuingOrganization} &bull; Issued {new Date(cert.issueDate).toLocaleDateString()}</span>
+-                                </div>
+-                              </div>
+-                              {cert.credentialUrl && (
+-                                <a
+-                                  href={cert.credentialUrl}
+-                                  target="_blank"
+-                                  rel="noreferrer"
+-                                  className="text-[10px] font-bold hover:underline"
+-                                  style={{ color: layoutSettings.accentColor || undefined }}
+-                                >
+-                                  Verify Certification
+-                                </a>
+-                              )}
+-                            </div>
+-                          ))
+-                        )}
+-                      </div>
+-                    </section>
+-                  );
+-                case "achievements":
+-                  return (
+-                    <section key="achievements" className="flex flex-col gap-4">
+-                      <h3 className={`pb-2 border-b ${currentStyle.sectionTitle} ${currentStyle.divider}`}>
+-                        Awards & Contests
+-                      </h3>
+-                      <div className="grid sm:grid-cols-2 gap-4">
+-                        {achievements.length === 0 ? (
+-                          <span className="text-xs opacity-50 italic">No achievements reported.</span>
+-                        ) : (
+-                          achievements.map((ach: any) => (
+-                            <div key={ach.id} className={`p-4 rounded-lg border ${getCardClass(currentStyle.card)} flex flex-col gap-1.5`}>
+-                              <h4 className="font-bold text-xs">{ach.title}</h4>
+-                              <span className="text-[9px] opacity-50 font-bold uppercase">{ach.category} &bull; {new Date(ach.dateEarned).toLocaleDateString()}</span>
+-                              <p className="text-[11px] opacity-75 leading-relaxed">{ach.description}</p>
+-                            </div>
+-                          ))
+-                        )}
+-                      </div>
+-                    </section>
+-                  );
+-                case "community":
+-                  return (
+-                    <section key="community" className="flex flex-col gap-4">
+-                      <h3 className={`pb-2 border-b ${currentStyle.sectionTitle} ${currentStyle.divider}`}>
+-                        Community Outreach
+-                      </h3>
+-                      <div className="grid sm:grid-cols-2 gap-4">
+-                        {communityServices.length === 0 ? (
+-                          <span className="text-xs opacity-50 italic">No service records registered.</span>
+-                        ) : (
+-                          communityServices.map((service: any) => (
+-                            <div key={service.id} className={`p-4 rounded-lg border ${getCardClass(currentStyle.card)} flex flex-col gap-1.5`}>
+-                              <h4 className="font-bold text-xs">{service.organization}</h4>
+-                              <span className="text-[9px] opacity-50 font-bold uppercase">{service.role}</span>
+-                              <p className="text-[11px] opacity-75 leading-relaxed">{service.description}</p>
+-                            </div>
+-                          ))
+-                        )}
+-                      </div>
+-                    </section>
+-                  );
+-                default:
+-                  return null;
+-              }
+-            })}
+-          </div>
+-        </main>
++          </main>
++        )}
++
++        {/* 5. AI Futuristic Theme Layout */}
++        {theme === "futuristic" && (
++          <main className="max-w-6xl mx-auto w-full px-6 py-12 md:py-16 flex-1 grid grid-cols-12 gap-6 items-start animate-fade-in">
++            {renderFuturisticHud()}
++            
++            {/* Left Telemetry Panel */}
++            <div className="col-span-12 md:col-span-4">
++              {renderFuturisticLeftPanel()}
++            </div>
++
++            {/* Right Node List */}
++            <div className="col-span-12 md:col-span-8 flex flex-col gap-8">
++              {(layoutSettings.visibleSections || [
++                "about",
++                "projects",
++                "publications",
++                "certifications",
++                "achievements",
++                "community"
++              ]).map((sectionKey: string) => renderSection(sectionKey))}
++            </div>
++          </main>
++        )}
+ 
+         {/* Footer */}
+         <footer className="py-6 px-6 text-center text-[10px] opacity-50 border-t border-slate-900/10 mt-12">
